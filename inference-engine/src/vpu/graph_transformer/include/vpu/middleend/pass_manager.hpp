@@ -245,6 +245,8 @@ public:
 
     Pass::Ptr propagateDynamism();
 
+    Pass::Ptr reshapeBeforeConvTiling();
+
 protected:
     StageBuilder::Ptr _stageBuilder;
     BackEnd::Ptr _backEnd;
