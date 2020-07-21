@@ -178,6 +178,9 @@ PassSet::Ptr PassManager::buildMiddleEnd() {
         ADD_PASS(swapConcatAndHwOps);
         ADD_DUMP_PASS("swapConcatAndHwOps");
 
+        ADD_PASS(reshapeBeforeConvTiling);
+        ADD_DUMP_PASS("reshapeBeforeConvTiling");
+
         ADD_PASS(mergeHwStages);
         ADD_DUMP_PASS("mergeHwStages");
 
