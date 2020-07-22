@@ -215,6 +215,9 @@ PassSet::Ptr PassManager::buildMiddleEnd() {
         ADD_PASS(hwFullyConnectedTiling);
         ADD_DUMP_PASS("hwTiling");
 
+        ADD_PASS(reshapeTiles);
+        ADD_DUMP_PASS("reshapeTiles");
+
         if (env.config.hwExtraSplit) {
             ADD_PASS(hwExtraSplit);
             ADD_DUMP_PASS("hwExtraSplit");

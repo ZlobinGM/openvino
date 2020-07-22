@@ -26,7 +26,7 @@ private:
 };
 
 void PassImpl::run(const Model& model) {
-    VPU_PROFILE(hwConvTiling);
+    VPU_PROFILE(resheapeConv);
     for (const auto& stage : model->getStages()) {
         if (stage->type() != StageType::StubConv) {
             continue;

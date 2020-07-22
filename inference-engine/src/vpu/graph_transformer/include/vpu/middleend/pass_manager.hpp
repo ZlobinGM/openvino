@@ -247,6 +247,8 @@ public:
 
     Pass::Ptr reshapeBeforeConvTiling();
 
+    Pass::Ptr reshapeTiles();
+
 protected:
     StageBuilder::Ptr _stageBuilder;
     BackEnd::Ptr _backEnd;
