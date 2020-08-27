@@ -28,6 +28,9 @@ const std::vector<std::vector<ptrdiff_t>> padEnds = {{0, 0},
 const std::vector<std::vector<size_t >> dilations = {{1, 1},
                                                             {3, 1}};
 const std::vector<size_t> numOutCannels = {1, 5};
+
+const std::vector<size_t> numOutCannelsReshapeConv = {10, 128, 490}; // For "reshapeBeforeConvTiling" pass
+
 const std::vector<ngraph::op::PadType> padTypes = {
         ngraph::op::PadType::EXPLICIT,
         ngraph::op::PadType::VALID  // FAILURE: Cannot create convolution forward descriptor for layer: Convolution_19010
@@ -58,6 +61,15 @@ const auto conv2DParams_BigDimensionValid = ::testing::Combine(
         ::testing::ValuesIn(std::vector<std::vector<size_t>>({{1, 1}})),
         ::testing::ValuesIn(std::vector<size_t>({64})),
         ::testing::Values(ngraph::op::PadType::VALID)
+);
+const auto conv2DParams_ReshapeBeforeConv = ::testing::Combine(
+        ::testing::ValuesIn(std::vector<std::vector<size_t>>({{1, 1}})), // kernel
+        ::testing::ValuesIn(std::vector<std::vector<size_t>>({{1, 1}})), // strides
+        ::testing::Values(std::vector<ptrdiff_t>({0, 0})),               // pad begin
+        ::testing::Values(std::vector<ptrdiff_t>({0, 0})),               // pad end
+        ::testing::ValuesIn(std::vector<std::vector<size_t>>({{1, 1}})), // dilation
+        ::testing::ValuesIn(numOutCannelsReshapeConv),
+        ::testing::Values(ngraph::op::PadType::NOTSET)
 );
 
 INSTANTIATE_TEST_CASE_P(Convolution2D_ExplicitPadding, ConvolutionLayerTest,
@@ -92,6 +104,14 @@ INSTANTIATE_TEST_CASE_P(Convolution2D_BigDimensionValid, ConvolutionLayerTest,
                                 ::testing::Values(std::vector<size_t >({1, 3, 1, 2500})),
                                 ::testing::Values(InferenceEngine::Layout::ANY),
                                 ::testing::Values(InferenceEngine::Layout::ANY),
+                                ::testing::Values(CommonTestUtils::DEVICE_MYRIAD)),
+                        ConvolutionLayerTest::getTestCaseName);
+
+INSTANTIATE_TEST_CASE_P(Convolution2D_ReshapeBeforeConv, ConvolutionLayerTest,
+                        ::testing::Combine(
+                                conv2DParams_ReshapeBeforeConv,
+                                ::testing::ValuesIn(netPrecisions),
+                                ::testing::Values(std::vector<size_t >({1, 608, 34, 60})), // input tensor
                                 ::testing::Values(CommonTestUtils::DEVICE_MYRIAD)),
                         ConvolutionLayerTest::getTestCaseName);
 
