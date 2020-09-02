@@ -6,7 +6,7 @@
 // to get more efficient HW tiling (pass "hwConvTiling") using reshape stages.
 
 #include <vpu/middleend/pass_manager.hpp>
-#include "reshape_conv_choice_func.hpp"
+#include <vpu/middleend/hw/conv_tiling/reshape_conv_func.hpp>
 
 namespace vpu {
 
@@ -56,6 +56,7 @@ void PassImpl::run(const Model& model) {
         int dimW = inputDesc.dim(Dim::W);
 
         int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
+        resultH = (resultH == 0)? dimH : resultH;
         int resultW = dimH*dimW/resultH;
 
         if (outputDesc.dim(Dim::W) != inputDesc.dim(Dim::W) ||
