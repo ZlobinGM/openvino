@@ -6,6 +6,7 @@
 // to get more efficient HW tiling (pass "hwConvTiling") using reshape stages.
 
 #include <vpu/middleend/pass_manager.hpp>
+#include "reshape_conv_choice_func.hpp"
 
 namespace vpu {
 
@@ -49,31 +50,26 @@ void PassImpl::run(const Model& model) {
             continue;
         }
 
-        const auto actualInputShape = inputDesc.dims();
-        const auto expectedInputShape = DimValues{ {Dim::N, 1}, {Dim::C, 608}, {Dim::H, 34}, {Dim::W, 60} };
+        int inputC = inputDesc.dim(Dim::C);
+        int outputC = outputDesc.dim(Dim::C);
+        int dimH = inputDesc.dim(Dim::H);
+        int dimW = inputDesc.dim(Dim::W);
 
-        if (actualInputShape != expectedInputShape) {
-            continue;
-        }
+        int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
+        int resultW = dimH*dimW/resultH;
 
         if (outputDesc.dim(Dim::W) != inputDesc.dim(Dim::W) ||
             outputDesc.dim(Dim::H) != inputDesc.dim(Dim::H)) {
             continue;
         }
 
-        std::map<size_t, size_t> outChannels{ {10, 1}, {128, 2}, {490, 3}};
-
-        if (outChannels.find(outputDesc.dim(Dim::C)) == outChannels.end()) {
-            continue;
-        }
-
         auto newDesc_input = inputDesc;
-        newDesc_input.setDim(Dim::W, 255);
-        newDesc_input.setDim(Dim::H, 8);
+        newDesc_input.setDim(Dim::W, resultW);
+        newDesc_input.setDim(Dim::H, resultH);
 
         auto newDesc_output = outputDesc;
-        newDesc_output.setDim(Dim::W, 255);
-        newDesc_output.setDim(Dim::H, 8);
+        newDesc_output.setDim(Dim::W, resultW);
+        newDesc_output.setDim(Dim::H, resultH);
 
         auto newInput = model->duplicateData(input, "@input-data-after-reshape",
                 newDesc_input);
