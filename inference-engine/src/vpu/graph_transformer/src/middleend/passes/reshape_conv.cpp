@@ -54,7 +54,10 @@ void PassImpl::run(const Model& model) {
         int outputC = outputDesc.dim(Dim::C);
         int dimH = inputDesc.dim(Dim::H);
         int dimW = inputDesc.dim(Dim::W);
-
+        std::cout << std::endl << "FIND_CONV_1X1 : InputC=" << inputC
+                << " , OutputC=" << outputC << " , DimH=" << dimH <<
+                " , DimW=" << dimW << " , kernelStrideX=" << stage->attrs().get<int>("kernelStrideX")
+                << " , kernelStrideY=" << stage->attrs().get<int>("kernelStrideY") << std::endl;
         int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
         if (resultH == 0) continue;
         int resultW = dimH*dimW/resultH;

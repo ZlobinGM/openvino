@@ -224,30 +224,6 @@ protected:
     }
 };
 
-TEST_P(ReshapeBeforeConvCases, CompareCountOfLayersPatternCaseTest) {
-    //
-    //                          [Fake]              ->|
-    //                          [Weights]           ->|
-    //                          [Fake]              ->|
-    //  [Input] -> (Reshape) -> [InputAfterReshape] ->| -> (StubConv) -> [OutputBeforeReshape] -> (Reshape) -> [Output]
-    //
-    const auto& p = GetParam();
-    const auto& inDims = std::get<0>(p);
-    const auto& outDims = std::get<1>(p);
-
-    const auto input = InitInputData(inDims);
-    _model->attrs().set<int>("numInputs", 1);
-    const auto output = InitOutputData(outDims);
-
-    InitConvStage(input, output);
-
-    ASSERT_NO_THROW(Compile());
-
-    CreateCorrectPattern(input, output);
-
-    Validate();
-}
-
 static const std::vector<DimValues> patternInputDims = {
     DimValues{ {Dim::N, 1}, {Dim::C, 608}, {Dim::H, 34}, {Dim::W, 60} }
 };
@@ -256,11 +232,6 @@ static const std::vector<DimValues> patternOutputDims = {
     DimValues{ {Dim::N, 1}, {Dim::C, 128}, {Dim::H, 34}, {Dim::W, 60} },
     DimValues{ {Dim::N, 1}, {Dim::C, 490}, {Dim::H, 34}, {Dim::W, 60} }
 };
-
-INSTANTIATE_TEST_CASE_P(
-        TargetCases, ReshapeBeforeConvCases, testing::Combine(
-    testing::ValuesIn(patternInputDims),
-    testing::ValuesIn(patternOutputDims)));
 
 TEST_F(NoReshapeBeforeConvCases, NoChangesForOtherConvKernel) {
     //
@@ -335,61 +306,5 @@ INSTANTIATE_TEST_CASE_P(
         NontargetCases, NoReshapeBeforeConvCases, testing::Combine(
     testing::ValuesIn(noPatternDims),
     testing::ValuesIn(noPatternDims)));
-
-TEST_F(ReshapeBeforeConvCases, TargetConvolutionBeforeNontarget) {
-    //
-    //                          [Fake]              ->|                                                           [Fake]          ->|
-    //                          [FirstWeights]      ->|                                                           [SecondWeights] ->|
-    //                          [Fake]              ->|                                                           [Fake]          ->|
-    //  [Input] -> (Reshape) -> [InputAfterReshape] ->| -> (StubConv) -> [LayerDataBeforeReshape] -> (Reshape) -> [LayerData]     ->| ->
-    //
-    //  -> (StubConv) -> [Output]
-    //
-    DimValues inDims = DimValues{ {Dim::N, 1}, {Dim::C, 608}, {Dim::H, 34}, {Dim::W, 60} };
-    DimValues layerDims = DimValues{ {Dim::N, 1}, {Dim::C, 490}, {Dim::H, 34}, {Dim::W, 60} };
-    DimValues outDims = DimValues{ {Dim::N, 1}, {Dim::C, 10}, {Dim::H, 34}, {Dim::W, 60} };
-
-    const auto input = InitInputData(inDims);
-    _model->attrs().set<int>("numInputs", 1);
-    const auto layerData = InitNewData(layerDims, "Layer");
-    const auto output = InitOutputData(outDims);
-
-    InitConvStage(input, layerData);
-    InitConvStage(layerData, output);
-
-    ASSERT_NO_THROW(Compile());
-
-    CreateCorrectTwoConvPattern(input, layerData, output, ReshapeFirst);
-
-    Validate();
-}
-
-TEST_F(ReshapeBeforeConvCases, TargetConvolutionAfterNontarget) {
-    //
-    //  [Fake]         ->|                                              [Fake]                  ->|
-    //  [FirstWeights] ->|                                              [SecondWeights]         ->|
-    //  [Fake]         ->|                                              [Fake]                  ->|
-    //  [Input]        ->| -> (StubConv) -> [LayerData] -> (Reshape) -> [LayerDataAfterReshape] ->| ->
-    //
-    //  -> (StubConv) -> [OutputBeforeReshape] -> (Reshape) -> [Output]
-    //
-    DimValues inDims = DimValues{ {Dim::N, 1}, {Dim::C, 800}, {Dim::H, 34}, {Dim::W, 60} };
-    DimValues layerDims = DimValues{ {Dim::N, 1}, {Dim::C, 608}, {Dim::H, 34}, {Dim::W, 60} };
-    DimValues outDims = DimValues{ {Dim::N, 1}, {Dim::C, 128}, {Dim::H, 34}, {Dim::W, 60} };
-
-    const auto input = InitInputData(inDims);
-    _model->attrs().set<int>("numInputs", 1);
-    const auto layerData = InitNewData(layerDims, "Layer");
-    const auto output = InitOutputData(outDims);
-
-    InitConvStage(input, layerData);
-    InitConvStage(layerData, output);
-
-    ASSERT_NO_THROW(Compile());
-
-    CreateCorrectTwoConvPattern(input, layerData, output, ReshapeSecond);
-
-    Validate();
-}
 
 } // namespace vpu
