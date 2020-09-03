@@ -56,7 +56,7 @@ void PassImpl::run(const Model& model) {
         int dimW = inputDesc.dim(Dim::W);
 
         int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
-        resultH = (resultH == 0)? dimH : resultH;
+        if (resultH == 0) continue;
         int resultW = dimH*dimW/resultH;
 
         if (outputDesc.dim(Dim::W) != inputDesc.dim(Dim::W) ||
