@@ -159,7 +159,7 @@ static void setConfig(std::map<std::string, std::string>& config,
     config[CONFIG_KEY(LOG_LEVEL)] = CONFIG_VALUE(LOG_WARNING);
     config[InferenceEngine::MYRIAD_ENABLE_RECEIVING_TENSOR_TIME] = CONFIG_VALUE(YES);
     config[InferenceEngine::MYRIAD_CUSTOM_LAYERS] = file_config_cl;
-    config[InferenceEngine::MYRIAD_PERF_REPORT_MODE] = InferenceEngine::MYRIAD_PER_LAYER;
+    config[InferenceEngine::MYRIAD_PERF_REPORT_MODE] = InferenceEngine::MYRIAD_PER_STAGE;
 }
 
 static void printPerformanceCounts(const std::map<std::string, InferenceEngine::InferenceEngineProfileInfo>& perfMap) {
