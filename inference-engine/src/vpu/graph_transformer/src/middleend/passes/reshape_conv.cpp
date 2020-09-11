@@ -34,11 +34,6 @@ void PassImpl::run(const Model& model) {
             continue;
         }
 
-        if (stage->attrs().get<int>("kernelSizeX") != 1 ||
-            stage->attrs().get<int>("kernelSizeY") != 1) {
-            continue;
-        }
-
         const auto input = stage->input(0);
         const auto output = stage->output(0);
 
@@ -50,10 +45,8 @@ void PassImpl::run(const Model& model) {
             continue;
         }
 
-        std::string stage_name = stage->name();
-        if (stage_name == "batch_normalization_68/FusedBatchNormV3/variance/Fused_Add_" ||
-            stage_name == "batch_normalization_70/FusedBatchNormV3/variance/Fused_Add_" ||
-            stage_name == "conv2d_74/Conv2D")
+        if (stage->attrs().get<int>("kernelSizeX") != 1 ||
+            stage->attrs().get<int>("kernelSizeY") != 1)
             continue;
 
         int inputC = inputDesc.dim(Dim::C);
@@ -61,11 +54,15 @@ void PassImpl::run(const Model& model) {
         int dimH = inputDesc.dim(Dim::H);
         int dimW = inputDesc.dim(Dim::W);
         int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
-        if (resultH == 0) continue;
-        std::cout << std::endl << "FIND_CONV_1X1 : Name=" << stage->name() << " , InputC=" << inputC
-                << " , OutputC=" << outputC << " , DimH=" << dimH <<
-                " , DimW=" << dimW << " , kernelStrideX=" << stage->attrs().get<int>("kernelStrideX")
-                << " , kernelStrideY=" << stage->attrs().get<int>("kernelStrideY") << std::endl;
+        if (resultH == 0) {
+            std::cout << "FIND_CONV_1X1 " << stage->name() << " InputC=" << inputC
+            << " OutputC=" << outputC << " DimH=" << dimH <<
+            " DimW=" << dimW << std::endl;
+            continue;
+        }
+        std::cout << "FIND_CONV_FOR_RESHAPE_1X1 " << stage->name() << " InputC=" << inputC
+            << " OutputC=" << outputC << " DimH=" << dimH <<
+            " DimW=" << dimW << std::endl;
         int resultW = dimH*dimW/resultH;
 
         auto newDesc_input = inputDesc;
