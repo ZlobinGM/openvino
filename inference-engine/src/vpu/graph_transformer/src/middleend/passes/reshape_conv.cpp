@@ -50,69 +50,31 @@ void PassImpl::run(const Model& model) {
             continue;
         }
 
-        int inputHW = inputDesc.dim(Dim::H) * inputDesc.dim(Dim::W);
+        std::string stage_name = stage->name();
+        if (stage_name == "batch_normalization_68/FusedBatchNormV3/variance/Fused_Add_" ||
+            stage_name == "batch_normalization_70/FusedBatchNormV3/variance/Fused_Add_" ||
+            stage_name == "conv2d_74/Conv2D")
+            continue;
+
         int inputC = inputDesc.dim(Dim::C);
         int outputC = outputDesc.dim(Dim::C);
+        int dimH = inputDesc.dim(Dim::H);
+        int dimW = inputDesc.dim(Dim::W);
+        int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
+        if (resultH == 0) continue;
+        std::cout << std::endl << "FIND_CONV_1X1 : Name=" << stage->name() << " , InputC=" << inputC
+                << " , OutputC=" << outputC << " , DimH=" << dimH <<
+                " , DimW=" << dimW << " , kernelStrideX=" << stage->attrs().get<int>("kernelStrideX")
+                << " , kernelStrideY=" << stage->attrs().get<int>("kernelStrideY") << std::endl;
+        int resultW = dimH*dimW/resultH;
 
         auto newDesc_input = inputDesc;
+        newDesc_input.setDim(Dim::W, resultW);
+        newDesc_input.setDim(Dim::H, resultH);
+
         auto newDesc_output = outputDesc;
-
-        if (inputHW == 676 &&
-            ((inputC == 256 && outputC == 128) ||
-            (inputC == 512 && outputC == 255) ||
-            (inputC == 512 && outputC == 256) ||
-            (inputC == 768 && outputC == 256))) {
-            newDesc_input.setDim(Dim::W, 13);
-            newDesc_input.setDim(Dim::H, 52);
-            newDesc_output.setDim(Dim::W, 13);
-            newDesc_output.setDim(Dim::H, 52);
-        }
-
-        if (inputHW == 2704 &&
-            ((inputC == 256 && outputC == 128) ||
-            (inputC == 256 && outputC == 255) ||
-            (inputC == 384 && outputC == 128))) {
-            newDesc_input.setDim(Dim::W, 16);
-            newDesc_input.setDim(Dim::H, 169);
-            newDesc_output.setDim(Dim::W, 16);
-            newDesc_output.setDim(Dim::H, 169);
-        }
-
-        if (inputHW == 10816 &&
-            (inputC == 128 && outputC == 64)) {
-            newDesc_input.setDim(Dim::W, 64);
-            newDesc_input.setDim(Dim::H, 169);
-            newDesc_output.setDim(Dim::W, 64);
-            newDesc_output.setDim(Dim::H, 169);
-        }
-
-        if (inputHW == 43264 &&
-            (inputC == 64 && outputC == 32)) {
-            newDesc_input.setDim(Dim::W, 128);
-            newDesc_input.setDim(Dim::H, 338);
-            newDesc_output.setDim(Dim::W, 128);
-            newDesc_output.setDim(Dim::H, 338);
-        }
-
-        // int inputC = inputDesc.dim(Dim::C);
-        // int outputC = outputDesc.dim(Dim::C);
-        // int dimH = inputDesc.dim(Dim::H);
-        // int dimW = inputDesc.dim(Dim::W);
-        // std::cout << std::endl << "FIND_CONV_1X1 : InputC=" << inputC
-        //         << " , OutputC=" << outputC << " , DimH=" << dimH <<
-        //         " , DimW=" << dimW << " , kernelStrideX=" << stage->attrs().get<int>("kernelStrideX")
-        //         << " , kernelStrideY=" << stage->attrs().get<int>("kernelStrideY") << std::endl;
-        // int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
-        // if (resultH == 0) continue;
-        // int resultW = dimH*dimW/resultH;
-
-        // auto newDesc_input = inputDesc;
-        // newDesc_input.setDim(Dim::W, resultW);
-        // newDesc_input.setDim(Dim::H, resultH);
-
-        // auto newDesc_output = outputDesc;
-        // newDesc_output.setDim(Dim::W, resultW);
-        // newDesc_output.setDim(Dim::H, resultH);
+        newDesc_output.setDim(Dim::W, resultW);
+        newDesc_output.setDim(Dim::H, resultH);
 
         auto newInput = model->duplicateData(input, "@input-data-after-reshape",
                 newDesc_input);
@@ -128,7 +90,7 @@ void PassImpl::run(const Model& model) {
                 nullptr, input, newInput);
 
         _stageBuilder->addReshapeStage(model,
-                stage->name() + "@copy-reinterpret-input-data",
+                stage->name() + "@copy-reinterpret-output-data",
                 nullptr, newOutput, output);
     }
 }

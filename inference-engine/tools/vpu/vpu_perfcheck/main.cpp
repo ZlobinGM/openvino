@@ -292,7 +292,7 @@ static void getBINFiles(std::vector<std::string> &out, const std::string &direct
 
 int num_requests = 4;
 
-#define MIN_ITER 1//000
+#define MIN_ITER 1000
 
 #define USE_CALLBACK
 
@@ -306,7 +306,7 @@ std::vector<time_point> iter_start;
 std::vector<time_point> iter_end;
 std::vector<double> iter_time;
 
-const int profile = 0;
+const int profile = 1;
 std::map<std::string, InferenceEngine::InferenceEngineProfileInfo> perfMap;
 
 int process(const std::string& modelFileName, const std::string& inputsDir,

@@ -172,12 +172,6 @@ PassSet::Ptr PassManager::buildMiddleEnd() {
             ADD_DUMP_PASS("reshapeDilationConv");
         }
 
-        ADD_PASS(upliftActivationStages);
-        ADD_DUMP_PASS("upliftActivationStages");
-
-        ADD_PASS(swapConcatAndHwOps);
-        ADD_DUMP_PASS("swapConcatAndHwOps");
-
         //
         // "reshapeBeforeConvTiling" pass changes geometry of convolution stages in order
         // to get more efficient HW tiling (pass "hwConvTiling") using reshape stages.
@@ -187,6 +181,12 @@ PassSet::Ptr PassManager::buildMiddleEnd() {
         // Otherwise, "hwConvTiling" will see incorrect values in "origConvOutput" attribute.
         ADD_PASS(reshapeBeforeConvTiling);
         ADD_DUMP_PASS("reshapeBeforeConvTiling");
+
+        ADD_PASS(upliftActivationStages);
+        ADD_DUMP_PASS("upliftActivationStages");
+
+        ADD_PASS(swapConcatAndHwOps);
+        ADD_DUMP_PASS("swapConcatAndHwOps");
 
         ADD_PASS(mergeHwStages);
         ADD_DUMP_PASS("mergeHwStages");
