@@ -60,7 +60,5 @@ int ChoiceDimH(int InC, int OutC, int DimH, int DimW) {
     // googlenet-v4 100    213.157 ms -> 166.39 ms | 9.82335 fps -> 11.8762 fps
     // if ((DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
     // if ((DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
-    // faster
-    if ((DimH * DimW == 5329) && (InC == 160) && (OutC == 64)) return 1;
     return 0;
 }
