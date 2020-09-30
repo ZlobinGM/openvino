@@ -292,7 +292,7 @@ static void getBINFiles(std::vector<std::string> &out, const std::string &direct
 
 int num_requests = 4;
 
-#define MIN_ITER 1000
+#define MIN_ITER 1//000
 
 #define USE_CALLBACK
 
