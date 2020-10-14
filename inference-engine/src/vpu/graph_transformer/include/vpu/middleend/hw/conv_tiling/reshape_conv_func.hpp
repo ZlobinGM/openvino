@@ -5,7 +5,7 @@
 // This pass changes geometry of convolution stages in order
 // to get more efficient HW tiling (pass "hwConvTiling") using reshape stages.
 
-int ChoiceDimH(int InC, int OutC, int DimH, int DimW) {
+int ChoiceDimH(std::string Name, int InC, int OutC, int DimH, int DimW) {
     // if (DimH * DimW == 676 &&
     //     ((InC == 256 && OutC == 128) ||
     //     (InC == 512 && OutC == 255) ||
@@ -60,5 +60,53 @@ int ChoiceDimH(int InC, int OutC, int DimH, int DimW) {
     // googlenet-v4 100    213.157 ms -> 166.39 ms | 9.82335 fps -> 11.8762 fps
     // if ((DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
     // if ((DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // googlenet-v4 100
+    // if ((Name == "inception_b1_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b1_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b1_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b2_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b2_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b3_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b3_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b3_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b4_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b4_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b5_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b5_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b5_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b6_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b6_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b6_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b7_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b7_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "inception_b7_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "reduction_b_3x3_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    // if ((Name == "reduction_b_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 256)) return 1;
+    // if ((Name == "inception_c1_1x1_4_scale/Add_") && (DimH * DimW == 64) && (InC == 1536) && (OutC == 384)) return 1;
+    // if ((Name == "inception_c1_1x1_2_scale/Add_") && (DimH * DimW == 64) && (InC == 1536) && (OutC == 256)) return 1;
+    // if ((Name == "inception_b7_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    // if ((Name == "inception_b7_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b1_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    if ((Name == "inception_b1_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b2_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    if ((Name == "inception_b2_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b2_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b3_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    if ((Name == "inception_b3_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b4_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    if ((Name == "inception_b4_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b5_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b5_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b6_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    if ((Name == "inception_b6_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b6_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b7_1x1_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 128)) return 1;
+    if ((Name == "inception_b7_7x1_2_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "inception_b7_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 192)) return 1;
+    if ((Name == "reduction_b_1x7_reduce_scale/Add_") && (DimH * DimW == 289) && (InC == 1024) && (OutC == 256)) return 1;
+    if ((Name == "inception_c1_1x1_4_scale/Add_") && (DimH * DimW == 64) && (InC == 1536) && (OutC == 384)) return 1;
+    if ((Name == "inception_c2_1x1_4_scale/Add_") && (DimH * DimW == 64) && (InC == 1536) && (OutC == 384)) return 1;
+    if ((Name == "inception_c2_1x1_2_scale/Add_") && (DimH * DimW == 64) && (InC == 1536) && (OutC == 256)) return 1;
+    if ((Name == "inception_c3_1x1_2_scale/Add_") && (DimH * DimW == 64) && (InC == 1536) && (OutC == 256)) return 1;
     return 0;
 }

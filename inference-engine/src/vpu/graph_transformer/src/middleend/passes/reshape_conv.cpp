@@ -25,6 +25,9 @@ private:
 void PassImpl::run(const Model& model) {
     VPU_PROFILE(hwConvTiling);
     for (const auto& stage : model->getStages()) {
+        std::string name = stage->name();
+        if (stage->origLayer()->params.count("ConvReshape"))
+            std::cout << "RTRTRTRTRTRTRTRT " << stage->origLayer()->params.at("ConvReshape") << " name " << name << std::endl;
         if (stage->type() != StageType::StubConv) {
             continue;
         }
@@ -49,18 +52,27 @@ void PassImpl::run(const Model& model) {
             stage->attrs().get<int>("kernelSizeY") != 1)
             continue;
 
+        // std::string name = stage->name();
         int inputC = inputDesc.dim(Dim::C);
         int outputC = outputDesc.dim(Dim::C);
         int dimH = inputDesc.dim(Dim::H);
         int dimW = inputDesc.dim(Dim::W);
-        int resultH = ChoiceDimH(inputC, outputC, dimH, dimW);
+        int resultH = ChoiceDimH(name, inputC, outputC, dimH, dimW);
+
+        // if (stage->origLayer()->params.count("PrimitivesPriority"))
+        //     std::cout << "RT " << stage->origLayer()->params.at("PrimitivesPriority") << std::endl;
+        // if (stage->origLayer()->params.count("ConvReshape"))
+        //     std::cout << "RTRTRTRTRTRTRTRT " << stage->origLayer()->params.at("ConvReshape") << " name" << name << std::endl;
+        // if (stage->origLayer()->params.count("strides"))
+        //     std::cout << "RT " << stage->origLayer()->params.at("strides") << std::endl;
+
         if (resultH == 0) {
-            std::cout << "FIND_CONV_1X1 " << stage->name() << " InputC=" << inputC
+            std::cout << "FIND_CONV_1X1 " << name << " InputC=" << inputC
             << " OutputC=" << outputC << " DimH=" << dimH <<
             " DimW=" << dimW << std::endl;
             continue;
         }
-        std::cout << "FIND_CONV_FOR_RESHAPE_1X1 " << stage->name() << " InputC=" << inputC
+        std::cout << "FIND_CONV_FOR_RESHAPE_1X1 " << name << " InputC=" << inputC
             << " OutputC=" << outputC << " DimH=" << dimH <<
             " DimW=" << dimW << std::endl;
         int resultW = dimH*dimW/resultH;

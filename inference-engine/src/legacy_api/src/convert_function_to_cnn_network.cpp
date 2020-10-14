@@ -946,6 +946,9 @@ void convertFunctionToICNNNetwork(const std::shared_ptr<const ::ngraph::Function
                     cnnLayer->affinity = str_attr->get();
                 } else {
                     cnnLayer->params[rt.first] = str_attr->get();
+                    if (rt.first == "ConvReshape") {
+                        std::cout << "FIND 1 ConvReshape in RT info" << std::endl;
+                    }
                 }
             }
         }
