@@ -40,7 +40,6 @@ bool ngraph::pass::InitNodeInfo::run_on_function(std::shared_ptr<ngraph::Functio
         // Default attributes initialization
         for (auto & attr : attributes) {
             // Skip initialization if attribute has been already set
-            // if (rtInfo.count("ConvReshape")) std::cout << "init node info find 1 ConvReshape" << std::endl;
             if (rtInfo.count(attr->get_type_info().name)) continue;
             if (auto init_attr = attr->init(node)) {
                 rtInfo[attr->get_type_info().name] = init_attr;

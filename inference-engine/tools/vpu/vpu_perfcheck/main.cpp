@@ -160,7 +160,7 @@ static void setConfig(std::map<std::string, std::string>& config,
     config[InferenceEngine::MYRIAD_ENABLE_RECEIVING_TENSOR_TIME] = CONFIG_VALUE(YES);
     config[InferenceEngine::MYRIAD_CUSTOM_LAYERS] = file_config_cl;
     config[VPU_CONFIG_KEY(PRINT_RECEIVE_TENSOR_TIME)] = CONFIG_VALUE(YES);
-    config[InferenceEngine::MYRIAD_PERF_REPORT_MODE] = InferenceEngine::MYRIAD_PER_STAGE;
+    config[InferenceEngine::MYRIAD_PERF_REPORT_MODE] = InferenceEngine::MYRIAD_PER_STAGE; // MYRIAD_PER_LAYER good param
     config[VPU_CONFIG_KEY(CUSTOM_LAYERS)] = file_config_cl;
 }
 

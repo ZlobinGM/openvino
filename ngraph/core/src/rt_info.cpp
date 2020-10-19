@@ -35,9 +35,11 @@ ngraph::Node::RTMap mergeRuntimeInfo(const ngraph::NodeVector& nodes)
         if (auto merge_attr = item.second->merge(nodes))
         {
             newInfo[item.second->get_type_info().name] = merge_attr;
+        } else {
+            newInfo[item.first] = item.second;
         }
     }
-
+    // New Info always empty :(
     return newInfo;
 }
 
@@ -65,6 +67,12 @@ void ngraph::copy_runtime_info(const ngraph::NodeVector& from, std::shared_ptr<n
 void ngraph::copy_runtime_info(const ngraph::NodeVector& from, ngraph::NodeVector to)
 {
     auto mergedInfo = mergeRuntimeInfo(from);
+    for (auto& item : mergedInfo)
+    {
+        if (item.first == "ConvReshape") {
+            std::cout << "copy_runtime_info mergedInfo ConvReshape = " << item.second << std::endl;
+        }
+    }
     for (auto& node : to)
     {
         auto& rtInfoTo = node->get_rt_info();

@@ -52,19 +52,22 @@ void PassImpl::run(const Model& model) {
             stage->attrs().get<int>("kernelSizeY") != 1)
             continue;
 
-        // std::string name = stage->name();
         int inputC = inputDesc.dim(Dim::C);
         int outputC = outputDesc.dim(Dim::C);
         int dimH = inputDesc.dim(Dim::H);
         int dimW = inputDesc.dim(Dim::W);
-        int resultH = ChoiceDimH(name, inputC, outputC, dimH, dimW);
+        int resultW = 0, resultH = 0;
+        resultH = ChoiceDimH(name, inputC, outputC, dimH, dimW);
 
-        // if (stage->origLayer()->params.count("PrimitivesPriority"))
-        //     std::cout << "RT " << stage->origLayer()->params.at("PrimitivesPriority") << std::endl;
-        // if (stage->origLayer()->params.count("ConvReshape"))
-        //     std::cout << "RTRTRTRTRTRTRTRT " << stage->origLayer()->params.at("ConvReshape") << " name" << name << std::endl;
-        // if (stage->origLayer()->params.count("strides"))
-        //     std::cout << "RT " << stage->origLayer()->params.at("strides") << std::endl;
+        if (stage->origLayer()->params.count("ConvReshape")) {
+            std::string rtParam = stage->origLayer()->params.at("ConvReshape");
+            try {
+                resultW = std::stoi(rtParam);
+                resultH = dimH * dimW / resultW;
+            } catch (...) {
+                resultW = resultH = 0;
+            }
+        }
 
         if (resultH == 0) {
             std::cout << "FIND_CONV_1X1 " << name << " InputC=" << inputC
@@ -75,7 +78,7 @@ void PassImpl::run(const Model& model) {
         std::cout << "FIND_CONV_FOR_RESHAPE_1X1 " << name << " InputC=" << inputC
             << " OutputC=" << outputC << " DimH=" << dimH <<
             " DimW=" << dimW << std::endl;
-        int resultW = dimH*dimW/resultH;
+        resultW = dimH*dimW/resultH;
 
         auto newDesc_input = inputDesc;
         newDesc_input.setDim(Dim::W, resultW);
