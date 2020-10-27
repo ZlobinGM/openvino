@@ -243,11 +243,13 @@ void PassImpl::run(const Model& model) {
         for (const auto& inEdge : stage->inputEdges()) {
             if (stridesInfo.hasInput(inEdge)) {
                 auto requiredStrides = stridesInfo.getInput(inEdge);
+                IE_ASSERT(inEdge->input()->checkStrides(requiredStrides));
             }
         }
         for (const auto& outEdge : stage->outputEdges()) {
             if (stridesInfo.hasOutput(outEdge)) {
                 auto requiredStrides = stridesInfo.getOutput(outEdge);
+                IE_ASSERT(outEdge->output()->checkStrides(requiredStrides));
             }
         }
 
