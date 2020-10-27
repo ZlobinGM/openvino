@@ -36,10 +36,10 @@ ngraph::Node::RTMap mergeRuntimeInfo(const ngraph::NodeVector& nodes)
         {
             newInfo[item.second->get_type_info().name] = merge_attr;
         } else {
-            newInfo[item.first] = item.second;
+            newInfo[item.first] = item.second; // need to make merge realization for "ConvReshape" unstead of this
         }
     }
-    // New Info always empty :(
+    
     return newInfo;
 }
 
