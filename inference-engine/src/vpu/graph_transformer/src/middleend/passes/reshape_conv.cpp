@@ -25,9 +25,6 @@ private:
 void PassImpl::run(const Model& model) {
     VPU_PROFILE(hwConvTiling);
     for (const auto& stage : model->getStages()) {
-        std::string name = stage->name();
-        if (stage->origLayer()->params.count("ConvReshape"))
-            std::cout << "RTRTRTRTRTRTRTRT " << stage->origLayer()->params.at("ConvReshape") << " name " << name << std::endl;
         if (stage->type() != StageType::StubConv) {
             continue;
         }
@@ -51,7 +48,8 @@ void PassImpl::run(const Model& model) {
         if (stage->attrs().get<int>("kernelSizeX") != 1 ||
             stage->attrs().get<int>("kernelSizeY") != 1)
             continue;
-
+        
+        std::string name = stage->name();
         int inputC = inputDesc.dim(Dim::C);
         int outputC = outputDesc.dim(Dim::C);
         int dimH = inputDesc.dim(Dim::H);
@@ -70,15 +68,9 @@ void PassImpl::run(const Model& model) {
         }
 
         if (resultH == 0) {
-            std::cout << "FIND_CONV_1X1 " << name << " InputC=" << inputC
-            << " OutputC=" << outputC << " DimH=" << dimH <<
-            " DimW=" << dimW << std::endl;
             continue;
         }
-        std::cout << "FIND_CONV_FOR_RESHAPE_1X1 " << name << " InputC=" << inputC
-            << " OutputC=" << outputC << " DimH=" << dimH <<
-            " DimW=" << dimW << std::endl;
-        resultW = dimH*dimW/resultH;
+        resultW = dimH * dimW / resultH;
 
         auto newDesc_input = inputDesc;
         newDesc_input.setDim(Dim::W, resultW);
