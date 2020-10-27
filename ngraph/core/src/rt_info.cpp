@@ -32,14 +32,12 @@ ngraph::Node::RTMap mergeRuntimeInfo(const ngraph::NodeVector& nodes)
     ngraph::Node::RTMap newInfo;
     for (auto& item : mergedInfo)
     {
-        if (auto merge_attr = item.second->merge(nodes))
-        {
+        if (auto merge_attr = item.second->merge(nodes)) {
             newInfo[item.second->get_type_info().name] = merge_attr;
         } else {
-            newInfo[item.first] = item.second; // need to make merge realization for "ConvReshape" unstead of this
+            newInfo[item.first] = item.second;      // need to make merge realization for "ConvReshape" unstead of this
         }
     }
-    
     return newInfo;
 }
 
