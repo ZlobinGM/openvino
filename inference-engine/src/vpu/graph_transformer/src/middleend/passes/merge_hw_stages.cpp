@@ -108,38 +108,10 @@ void PassImpl::run(const Model& model) {
         if (stage->type() == StageType::StubConv) {
             supportedPostOps.insert(StageType::LeakyRelu);
             supportedPostOps.insert(StageType::Clamp);
-
-            ///////////////////
-            //MAKE_SAVE_RESHAPE
-            // supportedPostOps.insert(StageType::Reshape);
-            //MAKE_SAVE_RESHAPE
-            ///////////////////
         }
 
         if (auto nextPostOpStage = getOneOfSingleNextStage(stage, supportedPostOps)) {
             bool isOK = true;
-
-            ///////////////////
-            //MAKE_SAVE_RESHAPE Only for one more step
-            // bool saveReshape = false;
-            // Stage reshapeStage;
-            // if (nextPostOpStage->type() == StageType::Reshape) {
-            //     if (!(nextPostOpStage->attrs().getOrDefault("saveForwardOp", false))) {
-            //         continue;
-            //     }
-            //     std::cout << std::endl << "RESHAPE_FOR_SKIP : Name=" << nextPostOpStage->name() << std::endl;
-            //     if (auto nextSavePostOpStage = getOneOfSingleNextStage(nextPostOpStage, supportedPostOps)) {
-            //         std::cout << std::endl << "NEXT_STAGE : Name=" << nextSavePostOpStage->name() << std::endl;
-            //         if (nextSavePostOpStage->type() != StageType::Reshape) {
-            //             reshapeStage = nextPostOpStage;
-            //             nextPostOpStage = nextSavePostOpStage;
-            //             std::cout << std::endl << "NEXT_NON_RESHAPE_STAGE : Name=" << nextPostOpStage->name() << std::endl;
-            //             saveReshape = true;
-            //         } else { isOK = false; }
-            //     } else { isOK = false; }
-            // }
-            //MAKE_SAVE_RESHAPE
-            ///////////////////
 
             if (nextPostOpStage->type() == StageType::Clamp) {
                 auto min_value = nextPostOpStage->attrs().get<float>("min_value");
@@ -167,25 +139,6 @@ void PassImpl::run(const Model& model) {
                 output = nextPostOpStage->output(0);
 
                 model->disconnectStage(nextPostOpStage);
-
-                ///////////////////
-                //MAKE_SAVE_RESHAPE Only for one more step
-                // if (saveReshape) {
-                //     int i = 0;
-                //     const auto& reshIn = reshapeStage->input(0);
-                //     std::cout << std::endl << i++;
-                //     // model->disconnectStage(reshapeStage);
-                //     std::cout << i++;
-                //     model->replaceStageInput(reshapeStage->inputEdge(0), reshIn);
-                //     std::cout << i++;
-                //     std::cout << i++;
-                //     model->replaceStageOutput(reshapeStage->outputEdge(0), output);
-                //     std::cout << i++ << std::endl;
-                // } else {
-                //     model->replaceStageOutput(stage->outputEdge(0), output);
-                // }
-                //MAKE_SAVE_RESHAPE
-                ///////////////////
 
                 model->replaceStageOutput(stage->outputEdge(0), output);
 
