@@ -38,7 +38,7 @@ ngraph::Node::RTMap mergeRuntimeInfo(const ngraph::NodeVector& nodes)
         }
         else
         {
-            newInfo[item.first] = item.second;      // need to make merge realization for "ConvReshape" unstead of this
+            newInfo[item.first] = item.second;
         }
     }
     
