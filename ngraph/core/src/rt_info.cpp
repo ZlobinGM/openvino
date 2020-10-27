@@ -50,6 +50,10 @@ ngraph::Node::RTMap mergeRuntimeInfo(const ngraph::NodeVector& nodes)
         {
             newInfo[item.first] = merge_attr;
         }
+        else
+        {
+            newInfo[item.first] = item.second;
+        }
     }
 
     return newInfo;
