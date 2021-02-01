@@ -142,13 +142,13 @@ public:
         _dirTiling(ConvGraphDataTilingFactory::makeDirTiling(*other._dirTiling)),
         _tilingOptions(other._tilingOptions) {}
     HWConvolutionTilingSearcher(ConvolutionOptions convolutionOptions, const Direction& direction,
-                                std::size_t maxTilingOptions) :
+                                std::size_t maxTilingOptions, int maxSoW, int maxSoH, int maxSoC) :
         _convolutionOptions(std::move(convolutionOptions)),
         _dirTiling(ConvGraphDataTilingFactory::makeDirTiling(_convolutionOptions, direction)),
         _maxTilingOptions(maxTilingOptions) {
             IE_ASSERT(maxTilingOptions > 0);
             _dirTiling->initTileSizes();
-            _tilingOptions = selectBetterTiling();
+            _tilingOptions = selectBetterTiling(maxSoW, maxSoH, maxSoC);
         }
 
     const std::vector<TilingOption>& tilingOptions() const {
@@ -160,7 +160,7 @@ public:
     HWConvolutionTileLayoutCut tileLayoutCut(const TilingOption& option) const;
 
 private:
-    std::vector<TilingOption> selectBetterTiling() const;
+    std::vector<TilingOption> selectBetterTiling(int maxSoW = 15, int maxSoH = 15, int maxSoC = 15) const;
 
     const ConvolutionOptions _convolutionOptions;
     const std::size_t _maxTilingOptions;
@@ -173,7 +173,8 @@ class HWConvolutionTiler final {
 public:
     HWConvolutionTiler() = delete;
     HWConvolutionTiler(const HWConvolutionTiler&) = default;
-    HWConvolutionTiler(ConvolutionOptions convolutionOptions, const Direction& direction, std::size_t maxTilingOptions);
+    HWConvolutionTiler(ConvolutionOptions convolutionOptions, const Direction& direction, std::size_t maxTilingOptions,
+                       int maxSoW = 15, int maxSoH = 15, int maxSoC = 15);
 
 
     bool isTilingPossible() const {

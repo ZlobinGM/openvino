@@ -257,9 +257,9 @@ public:
 };
 
 HWConvolutionTiler::HWConvolutionTiler(ConvolutionOptions convolutionOptions, const Direction& direction,
-                                       std::size_t maxTilingOptions) :
+                                       std::size_t maxTilingOptions, int maxSoW, int maxSoH, int maxSoC) :
     _convolutionOptions(std::move(convolutionOptions)),
-    _searcher(_convolutionOptions, direction, maxTilingOptions) {
+    _searcher(_convolutionOptions, direction, maxTilingOptions, maxSoW, maxSoH, maxSoC) {
     _tilingPossible = tileForHW();
 }
 
@@ -617,16 +617,16 @@ std::unique_ptr<GraphDataTiling> ConvGraphDataTilingFactory::makeDirTiling(const
 //
 // Looks for the optimal tiling accordingly to the cost function. Modifies dimensions in dirTiling during search.
 //
-std::vector<TilingOption> HWConvolutionTilingSearcher::selectBetterTiling() const {
+std::vector<TilingOption> HWConvolutionTilingSearcher::selectBetterTiling(int maxSoW, int maxSoH, int maxSoC) const {
     const auto& env = CompileEnv::get();
 
     auto& dirTiling = *_dirTiling;
     FixedMaxHeap<TilingOption> tilingOptions(_maxTilingOptions);
 
     // TODO: estimate this numbers
-    const int maxNumWidthTiles = 15;
-    const int maxNumHeightTiles = 15;
-    const int maxNumChannelTiles = _convolutionOptions._withPool ? 1 : 15;
+    const int maxNumWidthTiles = maxSoW;
+    const int maxNumHeightTiles = maxSoH;
+    const int maxNumChannelTiles = _convolutionOptions._withPool ? 1 : maxSoC;
 
     const auto outputTileInitial = dirTiling.getOutputTileDims();
     const auto inputTileInitial = dirTiling.getInputTileDims();
