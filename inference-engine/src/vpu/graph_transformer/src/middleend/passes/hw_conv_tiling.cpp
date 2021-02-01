@@ -94,11 +94,11 @@ void PassImpl::run(const Model& model) {
                     false
                 };
 
-                if  (stageOptions.kernelSizeX == 1 && stageOptions.kernelSizeY == 1 && stageOptions.kernelStride == 1)
+                if  (stageOptions.kernelSizeX == 1 && stageOptions.kernelSizeY == 1)
                     return HWTilingNS::HWConvolutionTiler{optionsWithoutPool, direction, tilingsCount, 100, 100, 100};
                 return HWTilingNS::HWConvolutionTiler{optionsWithoutPool, direction, tilingsCount};
             } else {
-                if  (stageOptions.kernelSizeX == 1 && stageOptions.kernelSizeY == 1 && stageOptions.kernelStride == 1)
+                if  (stageOptions.kernelSizeX == 1 && stageOptions.kernelSizeY == 1)
                     return HWTilingNS::HWConvolutionTiler{convolutionOptions, direction, tilingsCount, 100, 100, 100};
                 return tiler1stAttempt;
             }
