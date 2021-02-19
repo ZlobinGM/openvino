@@ -108,7 +108,6 @@ OutputStream::Ptr defaultOutput(const std::string& fileName) {
 
 namespace {
 
-const auto COLOR_BLACK = "\033[1;30m";
 const auto COLOR_RED = "\033[1;31m";
 const auto COLOR_GREEN = "\033[1;32m";
 const auto COLOR_YELLOW = "\033[1;33m";
@@ -122,7 +121,6 @@ void Logger::printHeader(LogLevel msgLevel) const noexcept {
     try {
         if (_out->supportColors()) {
             static const EnumMap<LogLevel, const char*> levelColors{
-                {LogLevel::Fatal,   COLOR_BLACK},
                 {LogLevel::Error,   COLOR_RED},
                 {LogLevel::Warning, COLOR_YELLOW},
                 {LogLevel::Info,    COLOR_GREEN},

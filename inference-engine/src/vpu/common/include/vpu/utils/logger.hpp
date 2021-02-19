@@ -45,7 +45,6 @@ OutputStream::Ptr defaultOutput(const std::string& fileName = std::string());
 
 VPU_DECLARE_ENUM(LogLevel,
     None,
-    Fatal,    /* used for very severe error events that will most probably cause the application to terminate */
     Error,    /* reporting events which are not expected during normal execution, containing probable reason */
     Warning,  /* indicating events which are not usual and might lead to errors later */
     Info,     /* short enough messages about ongoing activity in the process */
@@ -57,16 +56,16 @@ class Logger final {
 public:
     using Ptr = std::shared_ptr<Logger>;
 
-    static constexpr const int IDENT_SIZE = 4;
+    static constexpr int IDENT_SIZE = 4;
 
     class Section final {
     public:
-        inline explicit Section(const Logger::Ptr& log) : _log(log) {
+        explicit Section(Logger::Ptr log) : _log(std::move(log)) {
             IE_ASSERT(_log != nullptr);
             ++_log->_ident;
         }
 
-        inline ~Section() {
+        ~Section() {
             --_log->_ident;
         }
 
@@ -75,48 +74,41 @@ public:
     };
 
 public:
-    inline Logger(std::string name, LogLevel lvl, OutputStream::Ptr out) :
+    Logger(std::string name, LogLevel lvl, OutputStream::Ptr out) :
             _name(std::move(name)), _logLevel(lvl), _out(std::move(out)) {
         IE_ASSERT(_out != nullptr);
     }
 
-    inline LogLevel level() const {
-        return _logLevel;
-    }
-    inline bool isActive(LogLevel msgLevel) const {
+    bool isActive(LogLevel msgLevel) const {
         return static_cast<int>(msgLevel) <= static_cast<int>(_logLevel);
     }
-    void setLevel(LogLevel lvl) {
-        _logLevel = lvl;
+
+    void setLevel(const LogLevel& level) {
+        _logLevel = level;
     }
 
     template <typename... Args>
-    inline void fatal(const char* format, const Args&... args) const noexcept {
-        addEntry(LogLevel::Fatal, format, args...);
-    }
-
-    template <typename... Args>
-    inline void error(const char* format, const Args&... args) const noexcept {
+    void error(const char* format, const Args&... args) const noexcept {
         addEntry(LogLevel::Error, format, args...);
     }
 
     template <typename... Args>
-    inline void warning(const char* format, const Args&... args) const noexcept {
+    void warning(const char* format, const Args&... args) const noexcept {
         addEntry(LogLevel::Warning, format, args...);
     }
 
     template <typename... Args>
-    inline void info(const char* format, const Args&... args) const noexcept {
+    void info(const char* format, const Args&... args) const noexcept {
         addEntry(LogLevel::Info, format, args...);
     }
 
     template <typename... Args>
-    inline void debug(const char* format, const Args&... args) const noexcept {
+    void debug(const char* format, const Args&... args) const noexcept {
         addEntry(LogLevel::Debug, format, args...);
     }
 
     template <typename... Args>
-    inline void trace(const char* format, const Args&... args) const noexcept {
+    void trace(const char* format, const Args&... args) const noexcept {
         addEntry(LogLevel::Trace, format, args...);
     }
 
