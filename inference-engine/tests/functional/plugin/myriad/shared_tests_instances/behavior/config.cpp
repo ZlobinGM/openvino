@@ -73,6 +73,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
 
         {
             {KEY_LOG_LEVEL, LOG_INFO},
+            {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"},
@@ -111,6 +112,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {KEY_LOG_LEVEL, LOG_DEBUG}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO}
         },
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
@@ -165,6 +170,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {VPU_CONFIG_KEY(LOG_LEVEL), LOG_INFO,    {LOG_INFO}},
         {VPU_CONFIG_KEY(LOG_LEVEL), LOG_DEBUG,   {LOG_DEBUG}},
         {VPU_CONFIG_KEY(LOG_LEVEL), LOG_TRACE,   {LOG_TRACE}},
+
+        {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::YES, {true}},
+        {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO, {false}}
     };
     return customEntries;
 }
@@ -190,7 +198,9 @@ INSTANTIATE_TEST_CASE_P(smoke_BehaviorTests, CorrectConfigPublicOptionsTests,
         ::testing::ValuesIn(getPublicOptions())));
 
 const std::vector<std::string>& getPrivateOptions() {
-    static const std::vector<std::string> privateOptions = {};
+    static const std::vector<std::string> privateOptions = {
+        InferenceEngine::MYRIAD_COPY_OPTIMIZATION
+    };
     return privateOptions;
 }
 
@@ -203,6 +213,9 @@ INSTANTIATE_TEST_CASE_P(smoke_BehaviorTests, CorrectConfigPrivateOptionsTests,
 const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
     static const std::vector<std::map<std::string, std::string>> incorrectConfigs = {
         {{KEY_LOG_LEVEL, "INCORRECT_LOG_LEVEL"}},
+
+        {{InferenceEngine::MYRIAD_COPY_OPTIMIZATION, "ON"}},
+        {{InferenceEngine::MYRIAD_COPY_OPTIMIZATION, "OFF"}},
 
         {{InferenceEngine::MYRIAD_PROTOCOL, "BLUETOOTH"}},
         {{InferenceEngine::MYRIAD_PROTOCOL, "LAN"}},
@@ -245,6 +258,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
 
         {
             {KEY_LOG_LEVEL, LOG_INFO},
+            {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, "ON"},
             {InferenceEngine::MYRIAD_PROTOCOL, "BLUETOOTH"},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, "ON"},
