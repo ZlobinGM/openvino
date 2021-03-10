@@ -119,6 +119,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         },
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_USB}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, YES}
         },
 
@@ -126,6 +130,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {VPU_CONFIG_KEY(LOG_LEVEL), LOG_DEBUG}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), VPU_MYRIAD_CONFIG_VALUE(USB)}
         },
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
@@ -144,7 +152,8 @@ INSTANTIATE_TEST_CASE_P(smoke_Multi_BehaviorTests, CorrectConfigTests,
 
 const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaultEntries() {
     static const std::vector<std::pair<std::string, InferenceEngine::Parameter>> defaultEntries = {
-        {KEY_LOG_LEVEL, {LOG_NONE}}
+        {KEY_LOG_LEVEL, {LOG_NONE}},
+        {InferenceEngine::MYRIAD_PROTOCOL, {std::string()}}
     };
     return defaultEntries;
 }
@@ -172,7 +181,13 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {VPU_CONFIG_KEY(LOG_LEVEL), LOG_TRACE,   {LOG_TRACE}},
 
         {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::YES, {true}},
-        {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO, {false}}
+        {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_USB, {InferenceEngine::MYRIAD_USB}},
+        {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_PCIE, {InferenceEngine::MYRIAD_PCIE}},
+
+        {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), VPU_MYRIAD_CONFIG_VALUE(USB), {VPU_MYRIAD_CONFIG_VALUE(USB)}},
+        {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), VPU_MYRIAD_CONFIG_VALUE(PCIE), {VPU_MYRIAD_CONFIG_VALUE(PCIE)}}
     };
     return customEntries;
 }
@@ -187,6 +202,8 @@ const std::vector<std::string>& getPublicOptions() {
     static const std::vector<std::string> publicOptions = {
         KEY_LOG_LEVEL,
         VPU_CONFIG_KEY(LOG_LEVEL),
+        InferenceEngine::MYRIAD_PROTOCOL,
+        VPU_MYRIAD_CONFIG_KEY(PROTOCOL),
     };
     return publicOptions;
 }
@@ -286,6 +303,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectMultiConfigs(
         },
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {InferenceEngine::MYRIAD_PROTOCOL, "BLUETOOTH"}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, "ON"}
         },
 
@@ -293,6 +314,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectMultiConfigs(
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), "BLUETOOTH"}
         },
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
