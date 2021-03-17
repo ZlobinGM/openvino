@@ -55,6 +55,12 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, CONFIG_VALUE(NO)}},
 
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_FULL}},
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_INFER}},
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_STAGE}},
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_STAGE_SHAVES}},
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_STAGE_NCES}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -77,6 +83,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {
             {KEY_LOG_LEVEL, LOG_INFO},
             {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, CONFIG_VALUE(NO)},
+            {InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_INFER},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"},
@@ -154,6 +161,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {KEY_LOG_LEVEL, {LOG_NONE}},
         {InferenceEngine::MYRIAD_PROTOCOL, {std::string()}},
         {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, {true}},
+        {InferenceEngine::MYRIAD_POWER_MANAGEMENT, {InferenceEngine::MYRIAD_POWER_FULL}},
     };
     return defaultEntries;
 }
@@ -187,7 +195,13 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_PCIE, {InferenceEngine::MYRIAD_PCIE}},
 
         {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), VPU_MYRIAD_CONFIG_VALUE(USB), {VPU_MYRIAD_CONFIG_VALUE(USB)}},
-        {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), VPU_MYRIAD_CONFIG_VALUE(PCIE), {VPU_MYRIAD_CONFIG_VALUE(PCIE)}}
+        {VPU_MYRIAD_CONFIG_KEY(PROTOCOL), VPU_MYRIAD_CONFIG_VALUE(PCIE), {VPU_MYRIAD_CONFIG_VALUE(PCIE)}},
+
+        {InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_FULL,          {InferenceEngine::MYRIAD_POWER_FULL}},
+        {InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_INFER,         {InferenceEngine::MYRIAD_POWER_INFER}},
+        {InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_STAGE,         {InferenceEngine::MYRIAD_POWER_STAGE}},
+        {InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_STAGE_SHAVES,  {InferenceEngine::MYRIAD_POWER_STAGE_SHAVES}},
+        {InferenceEngine::MYRIAD_POWER_MANAGEMENT, InferenceEngine::MYRIAD_POWER_STAGE_NCES,    {InferenceEngine::MYRIAD_POWER_STAGE_NCES}},
     };
     return customEntries;
 }
@@ -216,7 +230,8 @@ INSTANTIATE_TEST_CASE_P(smoke_BehaviorTests, CorrectConfigPublicOptionsTests,
 
 const std::vector<std::string>& getPrivateOptions() {
     static const std::vector<std::string> privateOptions = {
-        InferenceEngine::MYRIAD_COPY_OPTIMIZATION
+        InferenceEngine::MYRIAD_COPY_OPTIMIZATION,
+        InferenceEngine::MYRIAD_POWER_MANAGEMENT
     };
     return privateOptions;
 }
@@ -233,6 +248,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
 
         {{InferenceEngine::MYRIAD_COPY_OPTIMIZATION, "ON"}},
         {{InferenceEngine::MYRIAD_COPY_OPTIMIZATION, "OFF"}},
+
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, "FULL"}},
+        {{InferenceEngine::MYRIAD_POWER_MANAGEMENT, "ECONOM"}},
 
         {{InferenceEngine::MYRIAD_PROTOCOL, "BLUETOOTH"}},
         {{InferenceEngine::MYRIAD_PROTOCOL, "LAN"}},
@@ -277,6 +295,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {KEY_LOG_LEVEL, LOG_INFO},
             {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, "ON"},
             {InferenceEngine::MYRIAD_PROTOCOL, "BLUETOOTH"},
+            {InferenceEngine::MYRIAD_POWER_MANAGEMENT, "FULL"},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, "ON"},
             {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"},
