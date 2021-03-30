@@ -4,6 +4,7 @@
 
 #include "vpu/vpu_plugin_config.hpp"
 #include "vpu/private_plugin_config.hpp"
+#include "vpu/utils/optional.hpp"
 #include "behavior/config.hpp"
 
 #include "myriad_devices.hpp"
@@ -41,7 +42,6 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(NO)}},
 
-        {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "-1"}},
         {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "0"}},
         {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"}},
 
@@ -173,6 +173,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, {true}},
         {InferenceEngine::MYRIAD_HW_EXTRA_SPLIT, {false}},
         {InferenceEngine::MYRIAD_HW_BLACK_LIST, {std::string()}},
+        {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB_AUTO}},
     };
     return defaultEntries;
 }
@@ -225,6 +226,10 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_HW_BLACK_LIST, "deconv", {"deconv"}},
         {InferenceEngine::MYRIAD_HW_BLACK_LIST, "conv,pool",   {"conv,pool"}},
+
+        {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "0", {"0"}},
+        {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "1", {"1"}},
+        {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10", {"10"}},
     };
     return customEntries;
 }
@@ -258,7 +263,8 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_COPY_OPTIMIZATION,
         InferenceEngine::MYRIAD_POWER_MANAGEMENT,
         InferenceEngine::MYRIAD_HW_EXTRA_SPLIT,
-        InferenceEngine::MYRIAD_HW_BLACK_LIST
+        InferenceEngine::MYRIAD_HW_BLACK_LIST,
+        InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB
     };
     return privateOptions;
 }
@@ -288,6 +294,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, "ON"}},
         {{InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "-1"}},
         {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "-10"}},
 
         {{InferenceEngine::MYRIAD_ENABLE_RECEIVING_TENSOR_TIME, "ON"}},
@@ -329,7 +336,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_HW_EXTRA_SPLIT, "ON"},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, "ON"},
-            {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"},
+            {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "-10"},
             {InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, "OFF"},
             {InferenceEngine::MYRIAD_THROUGHPUT_STREAMS, "1"},
             {InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, "ON"},
@@ -438,6 +445,9 @@ const std::vector<std::tuple<
         std::tuple<std::string, std::string, InferenceEngine::Parameter>>> customAndEnvironmentEntries = {
         {{KEY_LOG_LEVEL, LOG_NONE, {LOG_NONE}},
          {"IE_VPU_LOG_LEVEL", LOG_ERROR, {LOG_ERROR}}},
+
+        {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "0", {"0"}},
+         {"IE_VPU_TILING_CMX_LIMIT_KB", "1", {"1"}}},
 
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_WARNING, {LOG_WARNING}},
          {"IE_VPU_LOG_LEVEL", LOG_NONE, {LOG_NONE}}},
