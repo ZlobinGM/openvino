@@ -67,6 +67,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_HW_BLACK_LIST, "deconv"}},
         {{InferenceEngine::MYRIAD_HW_BLACK_LIST, "conv,pool"}},
 
+        {{InferenceEngine::MYRIAD_WATCHDOG, CONFIG_VALUE(YES)}},
+        {{InferenceEngine::MYRIAD_WATCHDOG, CONFIG_VALUE(NO)}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -94,6 +97,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_HW_BLACK_LIST, "deconv"},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
+            {InferenceEngine::MYRIAD_WATCHDOG, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"},
             {InferenceEngine::MYRIAD_ENABLE_RECEIVING_TENSOR_TIME, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_THROUGHPUT_STREAMS, "1"},
@@ -174,6 +178,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_HW_EXTRA_SPLIT, {false}},
         {InferenceEngine::MYRIAD_HW_BLACK_LIST, {std::string()}},
         {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB_AUTO}},
+        {InferenceEngine::MYRIAD_WATCHDOG, {std::chrono::milliseconds(1000)}},
     };
     return defaultEntries;
 }
@@ -230,6 +235,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "0", {"0"}},
         {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "1", {"1"}},
         {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10", {"10"}},
+
+        {InferenceEngine::MYRIAD_WATCHDOG, InferenceEngine::PluginConfigParams::YES, {std::chrono::milliseconds(1000)}},
+        {InferenceEngine::MYRIAD_WATCHDOG, InferenceEngine::PluginConfigParams::NO, {std::chrono::milliseconds(0)}},
     };
     return customEntries;
 }
@@ -264,7 +272,8 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_POWER_MANAGEMENT,
         InferenceEngine::MYRIAD_HW_EXTRA_SPLIT,
         InferenceEngine::MYRIAD_HW_BLACK_LIST,
-        InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB
+        InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB,
+        InferenceEngine::MYRIAD_WATCHDOG
     };
     return privateOptions;
 }
@@ -309,6 +318,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_HW_EXTRA_SPLIT, "ON"}},
         {{InferenceEngine::MYRIAD_HW_EXTRA_SPLIT, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_WATCHDOG, "ON"}},
+        {{InferenceEngine::MYRIAD_WATCHDOG, "OFF"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -340,6 +352,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, "OFF"},
             {InferenceEngine::MYRIAD_THROUGHPUT_STREAMS, "1"},
             {InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, "ON"},
+            {InferenceEngine::MYRIAD_WATCHDOG, "OFF"},
         }
     };
     return incorrectConfigs;
@@ -448,6 +461,9 @@ const std::vector<std::tuple<
 
         {{InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "0", {"0"}},
          {"IE_VPU_TILING_CMX_LIMIT_KB", "1", {"1"}}},
+
+        {{InferenceEngine::MYRIAD_WATCHDOG, InferenceEngine::PluginConfigParams::YES, {std::chrono::milliseconds(1000)}},
+         {"IE_VPU_MYRIAD_WATCHDOG_INTERVAL", "100", {std::chrono::milliseconds(100)}}},
 
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_WARNING, {LOG_WARNING}},
          {"IE_VPU_LOG_LEVEL", LOG_NONE, {LOG_NONE}}},
