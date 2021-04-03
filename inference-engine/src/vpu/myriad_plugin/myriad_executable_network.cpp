@@ -15,6 +15,7 @@
 #include <legacy/net_pass.h>
 #include <vpu/compile_env.hpp>
 #include <vpu/configuration/options/log_level.hpp>
+#include <vpu/configuration/options/throughput_streams.hpp>
 
 using namespace InferenceEngine;
 
@@ -43,7 +44,8 @@ ExecutableNetwork::ExecutableNetwork(
     _device = _executor->openDevice(devicePool, _config);
 
     const auto& revision = _device->revision();
-    _actualNumExecutors = config.compileConfig().numExecutors != -1 ? config.compileConfig().numExecutors : DefaultAllocation::numStreams(revision, config);
+    _actualNumExecutors = config.get<ThroughputStreamsOption>().hasValue()
+        ? config.get<ThroughputStreamsOption>().get() : DefaultAllocation::numStreams(revision, config);
 
     _supportedMetrics = {
         METRIC_KEY(NETWORK_NAME),
