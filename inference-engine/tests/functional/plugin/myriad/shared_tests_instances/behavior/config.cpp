@@ -101,6 +101,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, CONFIG_VALUE(NO)}},
 
+        {{KEY_EXCLUSIVE_ASYNC_REQUESTS, CONFIG_VALUE(YES)}},
+        {{KEY_EXCLUSIVE_ASYNC_REQUESTS, CONFIG_VALUE(NO)}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -144,6 +147,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_TENSOR_STRIDES, "tensor[1,2,3,4]"},
             {InferenceEngine::MYRIAD_IGNORE_UNKNOWN_LAYERS, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, CONFIG_VALUE(NO)},
+            {KEY_EXCLUSIVE_ASYNC_REQUESTS, CONFIG_VALUE(YES)},
         }
     };
 
@@ -196,6 +200,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {InferenceEngine::MYRIAD_THROUGHPUT_STREAMS, "1"}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {KEY_EXCLUSIVE_ASYNC_REQUESTS, YES}
         },
 
         // Deprecated
@@ -251,6 +259,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_TENSOR_STRIDES, {std::map<std::string, std::vector<int>>()}},
         {InferenceEngine::MYRIAD_IGNORE_UNKNOWN_LAYERS, {false}},
         {InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, {false}},
+        {KEY_EXCLUSIVE_ASYNC_REQUESTS, {false}},
     };
     return defaultEntries;
 }
@@ -356,6 +365,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {KEY_EXCLUSIVE_ASYNC_REQUESTS, InferenceEngine::PluginConfigParams::YES, {true}},
+        {KEY_EXCLUSIVE_ASYNC_REQUESTS, InferenceEngine::PluginConfigParams::NO, {false}},
     };
     return customEntries;
 }
@@ -378,6 +390,7 @@ const std::vector<std::string>& getPublicOptions() {
         VPU_CONFIG_KEY(PRINT_RECEIVE_TENSOR_TIME),
         KEY_PERF_COUNT,
         InferenceEngine::MYRIAD_THROUGHPUT_STREAMS,
+        KEY_EXCLUSIVE_ASYNC_REQUESTS,
     };
     return publicOptions;
 }
@@ -486,6 +499,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, "ON"}},
         {{InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, "OFF"}},
 
+        {{KEY_EXCLUSIVE_ASYNC_REQUESTS, "ON"}},
+        {{KEY_EXCLUSIVE_ASYNC_REQUESTS, "OFF"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -530,6 +546,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_TENSOR_STRIDES, "tensor(1,2,3,4)"},
             {InferenceEngine::MYRIAD_IGNORE_UNKNOWN_LAYERS, "OFF"},
             {InferenceEngine::MYRIAD_FORCE_PURE_TENSOR_ITERATOR, "OFF"},
+            {KEY_EXCLUSIVE_ASYNC_REQUESTS, "ON"},
         }
     };
     return incorrectConfigs;
@@ -567,6 +584,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectMultiConfigs(
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {InferenceEngine::MYRIAD_THROUGHPUT_STREAMS, "ONE"}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {KEY_EXCLUSIVE_ASYNC_REQUESTS, "ON"}
         },
 
         // Deprecated

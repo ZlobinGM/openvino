@@ -16,6 +16,7 @@
 #include <vpu/compile_env.hpp>
 #include <vpu/configuration/options/log_level.hpp>
 #include <vpu/configuration/options/throughput_streams.hpp>
+#include <vpu/configuration/options/exclusive_async_requests.hpp>
 
 using namespace InferenceEngine;
 
@@ -92,7 +93,7 @@ ExecutableNetwork::ExecutableNetwork(
 
     const auto& networkName = network.getName();
     _executor->allocateGraph(_device, _graphDesc, _graphBlob, compiledGraph->blobHeader, compiledGraph->numActiveStages, networkName, _actualNumExecutors);
-    if (_config.exclusiveAsyncRequests()) {
+    if (_config.get<ExclusiveAsyncRequestsOption>()) {
         ExecutorManager *executorManager = ExecutorManager::getInstance();
         _taskExecutor = executorManager->getExecutor("MYRIAD");
     }
@@ -137,7 +138,7 @@ void ExecutableNetwork::Import(std::istream& strm, std::vector<DevicePtr> &devic
         meta.status = InferenceEngineProfileInfo::LayerStatus::EXECUTED;
     }
 
-    if (_config.exclusiveAsyncRequests()) {
+    if (_config.get<ExclusiveAsyncRequestsOption>()) {
         ExecutorManager *executorManager = ExecutorManager::getInstance();
         _taskExecutor = executorManager->getExecutor("MYRIAD");
     }
