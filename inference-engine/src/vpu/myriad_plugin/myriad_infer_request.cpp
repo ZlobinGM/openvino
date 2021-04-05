@@ -17,6 +17,7 @@
 #include <vpu/utils/shape_io.hpp>
 #include "vpu/configuration/options/enable_receiving_tensor_time.hpp"
 #include "vpu/configuration/options/perf_report_mode.hpp"
+#include "vpu/configuration/options/tensor_strides.hpp"
 
 #include "myriad_executable_network.h"
 #include "myriad_infer_request.h"
@@ -42,7 +43,7 @@ MyriadInferRequest::MyriadInferRequest(GraphDesc &graphDesc,
         _graphDesc(graphDesc) {
     VPU_PROFILE(MyriadInferRequest);
 
-    const auto& ioStrides = _config.compileConfig().ioStrides;
+    const auto& ioStrides = _config.get<TensorStridesOption>();
     // allocate inputs
     for (auto &networkInput : _networkInputs) {
         IE_ASSERT(ioStrides.find(networkInput.first) == ioStrides.end())
