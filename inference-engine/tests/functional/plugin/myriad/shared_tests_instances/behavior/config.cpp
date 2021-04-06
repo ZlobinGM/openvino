@@ -281,6 +281,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, {false}},
         {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, {true}},
         {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, {false}},
+        {InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME, {std::string()}},
     };
     return defaultEntries;
 }
@@ -404,6 +405,8 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME, "/", {std::string("/")}},
     };
     return customEntries;
 }
@@ -461,6 +464,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU,
         InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING,
         InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION,
+        InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME,
     };
     return privateOptions;
 }
