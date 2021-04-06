@@ -110,6 +110,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, CONFIG_VALUE(NO)}},
 
+        {{InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, CONFIG_VALUE(YES)}},
+        {{InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, CONFIG_VALUE(NO)}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -156,6 +159,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_TENSOR_ITERATOR_UNROLLING, CONFIG_VALUE(NO)},
             {KEY_EXCLUSIVE_ASYNC_REQUESTS, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, CONFIG_VALUE(NO)},
+            {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, CONFIG_VALUE(NO)},
         }
     };
 
@@ -271,6 +275,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {KEY_EXCLUSIVE_ASYNC_REQUESTS, {false}},
         {InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS, {true}},
         {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, {false}},
+        {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, {true}},
     };
     return defaultEntries;
 }
@@ -388,6 +393,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, InferenceEngine::PluginConfigParams::YES, {true}},
+        {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, InferenceEngine::PluginConfigParams::NO, {false}},
     };
     return customEntries;
 }
@@ -443,6 +451,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_ENABLE_TENSOR_ITERATOR_UNROLLING,
         InferenceEngine::MYRIAD_ENABLE_WEIGHTS_ANALYSIS,
         InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU,
+        InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING,
     };
     return privateOptions;
 }
@@ -531,6 +540,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, "ON"}},
         {{InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, "ON"}},
+        {{InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, "OFF"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -577,6 +589,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_TENSOR_ITERATOR_UNROLLING, "OFF"},
             {KEY_EXCLUSIVE_ASYNC_REQUESTS, "ON"},
             {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, "OFF"},
+            {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, "OFF"},
         }
     };
     return incorrectConfigs;
