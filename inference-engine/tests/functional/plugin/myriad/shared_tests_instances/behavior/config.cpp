@@ -138,6 +138,8 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
 
         {{KEY_CONFIG_FILE, ""}},
 
+        {{InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_AUTO}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -161,6 +163,8 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{VPU_CONFIG_KEY(DETECT_NETWORK_BATCH), CONFIG_VALUE(NO)}},
 
         {{VPU_CONFIG_KEY(CUSTOM_LAYERS), ""}},
+
+        {{VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(DDR_AUTO)}},
 
         {
             {KEY_LOG_LEVEL, LOG_INFO},
@@ -199,6 +203,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_CUSTOM_LAYERS, ""},
             {KEY_CONFIG_FILE, ""},
+            {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_AUTO},
         }
     };
 
@@ -268,6 +273,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {KEY_CONFIG_FILE, ""}
         },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_AUTO}
+        },
 
 
         // Deprecated
@@ -290,6 +299,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {VPU_CONFIG_KEY(CUSTOM_LAYERS), ""}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(DDR_AUTO)}
         },
     };
     return correctMultiConfigs;
@@ -343,6 +356,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH, {true}},
         {InferenceEngine::MYRIAD_CUSTOM_LAYERS, {std::string()}},
         {KEY_CONFIG_FILE, {std::string()}},
+        {InferenceEngine::MYRIAD_DDR_TYPE, {InferenceEngine::MYRIAD_DDR_AUTO}},
     };
     return defaultEntries;
 }
@@ -488,6 +502,18 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {VPU_CONFIG_KEY(DETECT_NETWORK_BATCH), CONFIG_VALUE(YES), {true}},
         {VPU_CONFIG_KEY(DETECT_NETWORK_BATCH), CONFIG_VALUE(NO), {false}},
+
+        {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_AUTO,        {InferenceEngine::MYRIAD_DDR_AUTO}},
+        {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_MICRON_2GB,  {InferenceEngine::MYRIAD_DDR_MICRON_2GB}},
+        {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_SAMSUNG_2GB, {InferenceEngine::MYRIAD_DDR_SAMSUNG_2GB}},
+        {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_HYNIX_2GB,   {InferenceEngine::MYRIAD_DDR_HYNIX_2GB}},
+        {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_MICRON_1GB,  {InferenceEngine::MYRIAD_DDR_MICRON_1GB}},
+
+        {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(DDR_AUTO),    {VPU_MYRIAD_CONFIG_VALUE(DDR_AUTO)}},
+        {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(MICRON_2GB),  {VPU_MYRIAD_CONFIG_VALUE(MICRON_2GB)}},
+        {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(SAMSUNG_2GB), {VPU_MYRIAD_CONFIG_VALUE(SAMSUNG_2GB)}},
+        {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(HYNIX_2GB),   {VPU_MYRIAD_CONFIG_VALUE(HYNIX_2GB)}},
+        {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(MICRON_1GB),  {VPU_MYRIAD_CONFIG_VALUE(MICRON_1GB)}},
     };
     return customEntries;
 }
@@ -515,6 +541,8 @@ const std::vector<std::string>& getPublicOptions() {
         InferenceEngine::MYRIAD_CUSTOM_LAYERS,
         VPU_CONFIG_KEY(CUSTOM_LAYERS),
         KEY_CONFIG_FILE,
+        InferenceEngine::MYRIAD_DDR_TYPE,
+        VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE),
     };
     return publicOptions;
 }
@@ -666,6 +694,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH, "ON"}},
         {{InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_DDR_TYPE, "AUTO"}},
+        {{InferenceEngine::MYRIAD_DDR_TYPE, "2GB"}},
+        {{InferenceEngine::MYRIAD_DDR_TYPE, "1GB"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -687,6 +719,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
 
         {{VPU_CONFIG_KEY(DETECT_NETWORK_BATCH), "ON"}},
         {{VPU_CONFIG_KEY(DETECT_NETWORK_BATCH), "OFF"}},
+
+        {{VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), "AUTO"}},
+        {{VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), "2GB"}},
+        {{VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), "1GB"}},
 
         {
             {KEY_LOG_LEVEL, LOG_INFO},
@@ -722,6 +758,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_DISABLE_REORDER, "OFF"},
             {InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "-10"},
             {InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH, "OFF"},
+            {InferenceEngine::MYRIAD_DDR_TYPE, "AUTO"},
         }
     };
     return incorrectConfigs;
@@ -764,6 +801,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectMultiConfigs(
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {KEY_EXCLUSIVE_ASYNC_REQUESTS, "ON"}
         },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {InferenceEngine::MYRIAD_DDR_TYPE, "1GB"}
+        },
 
         // Deprecated
         {
@@ -793,6 +834,10 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectMultiConfigs(
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {VPU_CONFIG_KEY(PRINT_RECEIVE_TENSOR_TIME), "OFF"}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), "1GB"}
         },
     };
     return incorrectMultiConfigs;
