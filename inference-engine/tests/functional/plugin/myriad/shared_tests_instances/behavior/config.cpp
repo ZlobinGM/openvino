@@ -277,6 +277,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_AUTO}
         },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, YES}
+        },
 
 
         // Deprecated
@@ -303,6 +307,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(DDR_AUTO)}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {VPU_MYRIAD_CONFIG_KEY(FORCE_RESET), CONFIG_VALUE(YES)}
         },
     };
     return correctMultiConfigs;
@@ -357,6 +365,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_CUSTOM_LAYERS, {std::string()}},
         {KEY_CONFIG_FILE, {std::string()}},
         {InferenceEngine::MYRIAD_DDR_TYPE, {InferenceEngine::MYRIAD_DDR_AUTO}},
+        {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, {false}},
     };
     return defaultEntries;
 }
@@ -514,6 +523,12 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(SAMSUNG_2GB), {VPU_MYRIAD_CONFIG_VALUE(SAMSUNG_2GB)}},
         {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(HYNIX_2GB),   {VPU_MYRIAD_CONFIG_VALUE(HYNIX_2GB)}},
         {VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE), VPU_MYRIAD_CONFIG_VALUE(MICRON_1GB),  {VPU_MYRIAD_CONFIG_VALUE(MICRON_1GB)}},
+
+        {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, InferenceEngine::PluginConfigParams::YES, {true}},
+        {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {VPU_MYRIAD_CONFIG_KEY(FORCE_RESET), CONFIG_VALUE(YES), {true}},
+        {VPU_MYRIAD_CONFIG_KEY(FORCE_RESET), CONFIG_VALUE(NO), {false}},
     };
     return customEntries;
 }
@@ -543,6 +558,8 @@ const std::vector<std::string>& getPublicOptions() {
         KEY_CONFIG_FILE,
         InferenceEngine::MYRIAD_DDR_TYPE,
         VPU_MYRIAD_CONFIG_KEY(MOVIDIUS_DDR_TYPE),
+        InferenceEngine::MYRIAD_ENABLE_FORCE_RESET,
+        VPU_MYRIAD_CONFIG_KEY(FORCE_RESET),
     };
     return publicOptions;
 }
@@ -908,8 +925,14 @@ const std::vector<std::tuple<
         {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, InferenceEngine::PluginConfigParams::YES, {true}},
          {"IE_VPU_DUMP_ALL_PASSES", "0", {false}}},
 
+        {{InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, InferenceEngine::PluginConfigParams::YES, {true}},
+         {"IE_VPU_MYRIAD_FORCE_RESET", "0", {false}}},
+
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_WARNING, {LOG_WARNING}},
          {"IE_VPU_LOG_LEVEL", LOG_NONE, {LOG_NONE}}},
+
+        {{VPU_MYRIAD_CONFIG_KEY(FORCE_RESET), CONFIG_VALUE(YES), {true}},
+         {"IE_VPU_MYRIAD_FORCE_RESET", "0", {false}}},
     };
     return customAndEnvironmentEntries;
 }
