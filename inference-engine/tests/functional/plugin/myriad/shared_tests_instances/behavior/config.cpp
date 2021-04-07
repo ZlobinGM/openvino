@@ -125,6 +125,8 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(NO)}},
 
+        {{KEY_DEVICE_ID, ""}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -176,6 +178,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(NO)},
+            {KEY_DEVICE_ID, ""},
         }
     };
 
@@ -232,6 +235,10 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {KEY_EXCLUSIVE_ASYNC_REQUESTS, YES}
+        },
+        {
+            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
+            {KEY_DEVICE_ID, ""}
         },
 
         // Deprecated
@@ -298,6 +305,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, {false}},
         {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, {false}},
         {InferenceEngine::MYRIAD_DISABLE_REORDER, {false}},
+        {KEY_DEVICE_ID, {std::string()}},
     };
     return defaultEntries;
 }
@@ -457,6 +465,7 @@ const std::vector<std::string>& getPublicOptions() {
         KEY_PERF_COUNT,
         InferenceEngine::MYRIAD_THROUGHPUT_STREAMS,
         KEY_EXCLUSIVE_ASYNC_REQUESTS,
+        KEY_DEVICE_ID,
     };
     return publicOptions;
 }
