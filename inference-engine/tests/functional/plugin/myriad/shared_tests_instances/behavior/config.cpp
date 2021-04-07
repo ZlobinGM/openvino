@@ -127,6 +127,10 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
 
         {{KEY_DEVICE_ID, ""}},
 
+        {{InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "10"}},
+        {{InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "15"}},
+        {{InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "20"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -179,6 +183,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(NO)},
             {KEY_DEVICE_ID, ""},
+            {InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "10"},
         }
     };
 
@@ -306,6 +311,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, {false}},
         {InferenceEngine::MYRIAD_DISABLE_REORDER, {false}},
         {KEY_DEVICE_ID, {std::string()}},
+        {InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, {std::chrono::seconds(15)}},
     };
     return defaultEntries;
 }
@@ -442,6 +448,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_DISABLE_REORDER, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_DISABLE_REORDER, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "10", {std::chrono::seconds(10)}},
+        {InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "20", {std::chrono::seconds(20)}},
     };
     return customEntries;
 }
@@ -505,6 +514,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_DUMP_ALL_PASSES,
         InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES,
         InferenceEngine::MYRIAD_DISABLE_REORDER,
+        InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT,
     };
     return privateOptions;
 }
@@ -608,6 +618,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, "ON"}},
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "-1"}},
+        {{InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "-10"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -659,6 +672,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "OFF"},
             {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, "OFF"},
             {InferenceEngine::MYRIAD_DISABLE_REORDER, "OFF"},
+            {InferenceEngine::MYRIAD_DEVICE_CONNECT_TIMEOUT, "-10"},
         }
     };
     return incorrectConfigs;
