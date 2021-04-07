@@ -119,6 +119,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(NO)}},
 
+        {{InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, CONFIG_VALUE(YES)}},
+        {{InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, CONFIG_VALUE(NO)}},
+
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(NO)}},
 
@@ -171,6 +174,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(NO)},
+            {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_DISABLE_REORDER, CONFIG_VALUE(NO)},
         }
     };
@@ -292,6 +296,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME, {std::string()}},
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES_DIRECTORY, {std::string()}},
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, {false}},
+        {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, {false}},
         {InferenceEngine::MYRIAD_DISABLE_REORDER, {false}},
     };
     return defaultEntries;
@@ -424,6 +429,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, InferenceEngine::PluginConfigParams::NO, {false}},
 
+        {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, InferenceEngine::PluginConfigParams::YES, {true}},
+        {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, InferenceEngine::PluginConfigParams::NO, {false}},
+
         {InferenceEngine::MYRIAD_DISABLE_REORDER, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_DISABLE_REORDER, InferenceEngine::PluginConfigParams::NO, {false}},
     };
@@ -486,6 +494,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME,
         InferenceEngine::MYRIAD_DUMP_ALL_PASSES_DIRECTORY,
         InferenceEngine::MYRIAD_DUMP_ALL_PASSES,
+        InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES,
         InferenceEngine::MYRIAD_DISABLE_REORDER,
     };
     return privateOptions;
@@ -584,6 +593,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "ON"}},
         {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, "ON"}},
+        {{InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, "OFF"}},
+
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, "ON"}},
         {{InferenceEngine::MYRIAD_DISABLE_REORDER, "OFF"}},
 
@@ -636,6 +648,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, "OFF"},
             {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, "OFF"},
             {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "OFF"},
+            {InferenceEngine::MYRIAD_DISABLE_CONVERT_STAGES, "OFF"},
             {InferenceEngine::MYRIAD_DISABLE_REORDER, "OFF"},
         }
     };
