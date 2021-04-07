@@ -116,6 +116,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, CONFIG_VALUE(NO)}},
 
+        {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(YES)}},
+        {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(NO)}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -164,6 +167,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, CONFIG_VALUE(NO)},
+            {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, CONFIG_VALUE(NO)},
         }
     };
 
@@ -283,6 +287,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, {false}},
         {InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME, {std::string()}},
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES_DIRECTORY, {std::string()}},
+        {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, {false}},
     };
     return defaultEntries;
 }
@@ -410,6 +415,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
         {InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME, "/", {std::string("/")}},
 
         {InferenceEngine::MYRIAD_DUMP_ALL_PASSES_DIRECTORY, "/", {std::string("/")}},
+
+        {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, InferenceEngine::PluginConfigParams::YES, {true}},
+        {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, InferenceEngine::PluginConfigParams::NO, {false}},
     };
     return customEntries;
 }
@@ -469,6 +477,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION,
         InferenceEngine::MYRIAD_DUMP_INTERNAL_GRAPH_FILE_NAME,
         InferenceEngine::MYRIAD_DUMP_ALL_PASSES_DIRECTORY,
+        InferenceEngine::MYRIAD_DUMP_ALL_PASSES,
     };
     return privateOptions;
 }
@@ -563,6 +572,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, "ON"}},
         {{InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "ON"}},
+        {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "OFF"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -611,6 +623,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_ENABLE_REPL_WITH_SCRELU, "OFF"},
             {InferenceEngine::MYRIAD_ENABLE_PERMUTE_MERGING, "OFF"},
             {InferenceEngine::MYRIAD_ENABLE_MEMORY_TYPES_ANNOTATION, "OFF"},
+            {InferenceEngine::MYRIAD_DUMP_ALL_PASSES, "OFF"},
         }
     };
     return incorrectConfigs;
@@ -748,6 +761,9 @@ const std::vector<std::tuple<
 
         {{InferenceEngine::MYRIAD_NUMBER_OF_CMX_SLICES, "5", {"5"}},
          {"IE_VPU_NUMBER_OF_SHAVES_AND_CMX_SLICES", "6", {"6"}}},
+
+        {{InferenceEngine::MYRIAD_DUMP_ALL_PASSES, InferenceEngine::PluginConfigParams::YES, {true}},
+         {"IE_VPU_DUMP_ALL_PASSES", "0", {false}}},
 
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_WARNING, {LOG_WARNING}},
          {"IE_VPU_LOG_LEVEL", LOG_NONE, {LOG_NONE}}},
