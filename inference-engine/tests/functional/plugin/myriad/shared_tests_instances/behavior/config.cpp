@@ -366,6 +366,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {KEY_CONFIG_FILE, {std::string()}},
         {InferenceEngine::MYRIAD_DDR_TYPE, {InferenceEngine::MYRIAD_DDR_AUTO}},
         {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, {false}},
+        {VPU_MYRIAD_CONFIG_KEY(PLATFORM), {std::string()}},
     };
     return defaultEntries;
 }
@@ -394,6 +395,8 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {VPU_MYRIAD_CONFIG_KEY(PLATFORM), VPU_MYRIAD_CONFIG_VALUE(2480), {VPU_MYRIAD_CONFIG_VALUE(2480)}},
 
         {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_USB, {InferenceEngine::MYRIAD_USB}},
         {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_PCIE, {InferenceEngine::MYRIAD_PCIE}},
