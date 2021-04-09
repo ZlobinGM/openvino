@@ -69,7 +69,7 @@ ExecutableNetwork::ExecutableNetwork(
     const auto compilerLog = std::make_shared<Logger>(
         "GraphCompiler",
         _config.get<LogLevelOption>(),
-        defaultOutput(_config.compilerLogFilePath()));
+        consoleOutput());
 
     if (_device == nullptr)
         IE_THROW() << "No device was detected";
