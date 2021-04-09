@@ -88,7 +88,7 @@ bool isScalable(const Stage& stage) {
 
 bool checkGrowingOutput(const Model& model) {
     const auto& env = CompileEnv::get();
-    if (!env.config.checkPreprocessingInsideModel) {
+    if (!env.config.compileConfig().checkPreprocessingInsideModel) {
         return false;
     }
 

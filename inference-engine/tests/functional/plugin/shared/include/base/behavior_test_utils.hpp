@@ -187,4 +187,46 @@ public:
     InferenceEngine::Parameter reference;
 };
 
+using BehaviorParamsSingleOptionCustomAndEnvironment = std::tuple<
+    InferenceEngine::Precision,                                           // Network precision
+    std::string,                                                          // Device name
+    std::tuple<
+        std::tuple<std::string, std::string, InferenceEngine::Parameter>, // Configuration option key, value and reference
+        std::tuple<std::string, std::string, InferenceEngine::Parameter>  // Environment option key, value and reference
+    >
+>;
+
+class BehaviorTestsSingleOptionCustomAndEnvironment : public testing::WithParamInterface<BehaviorParamsSingleOptionCustomAndEnvironment>,
+                                                      public CommonTestUtils::TestsCommon {
+public:
+    void SetUp()  override {
+        std::tuple<
+            std::tuple<std::string, std::string, InferenceEngine::Parameter>,
+            std::tuple<std::string, std::string, InferenceEngine::Parameter>
+        > entry;
+        std::tuple<std::string, std::string, InferenceEngine::Parameter> customEntry;
+        std::tuple<std::string, std::string, InferenceEngine::Parameter> environmentEntry;
+        std::tie(netPrecision, targetDevice, entry) = this->GetParam();
+        std::tie(customEntry, environmentEntry) = entry;
+        std::tie(key, value, reference) = customEntry;
+        std::tie(keyEnv, valueEnv, referenceEnv) = environmentEntry;
+        function = ngraph::builder::subgraph::makeConvPoolRelu();
+    }
+
+    void TearDown() override {
+        function.reset();
+    }
+
+    std::shared_ptr<InferenceEngine::Core> ie = PluginCache::get().ie();
+    std::shared_ptr<ngraph::Function> function;
+    InferenceEngine::Precision netPrecision;
+    std::string targetDevice;
+    std::string key;
+    std::string value;
+    InferenceEngine::Parameter reference;
+    std::string keyEnv;
+    std::string valueEnv;
+    InferenceEngine::Parameter referenceEnv;
+};
+
 }  // namespace BehaviorTestsUtils

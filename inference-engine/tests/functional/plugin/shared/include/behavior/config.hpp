@@ -274,4 +274,31 @@ namespace BehaviorTestsDefinitions {
             ASSERT_EQ(0u, InferenceEngine::ExecutorManager::getInstance()->getIdleCPUStreamsExecutorsNumber());
         }
     }
+
+    using CorrectSingleOptionCustomAndEnvironmentValueConfigTests = BehaviorTestsUtils::BehaviorTestsSingleOptionCustomAndEnvironment;
+
+    TEST_P(CorrectSingleOptionCustomAndEnvironmentValueConfigTests, CheckEnvironmentOrCustomValueOfConfig) {
+        // Skip test according to plugin specific disabledTestPatterns() (if any)
+        SKIP_IF_CURRENT_TEST_IS_DISABLED()
+        // Create CNNNetwork from ngrpah::Function
+        InferenceEngine::CNNNetwork cnnNet(function);
+        ASSERT_NO_THROW(ie->GetMetric(targetDevice, METRIC_KEY(SUPPORTED_CONFIG_KEYS)));
+
+        std::string originEnv = std::getenv(keyEnv.c_str()) == NULL ? std::string() : std::getenv(keyEnv.c_str());
+        setenv(keyEnv.c_str(), valueEnv.c_str(), 1);
+
+        std::map<std::string, std::string> configuration = {{key, value}};
+        ASSERT_NO_THROW(ie->SetConfig(configuration, targetDevice));
+        #if defined(NDEBUG)
+            ASSERT_EQ(ie->GetConfig(targetDevice, key), reference);
+        #else
+            ASSERT_EQ(ie->GetConfig(targetDevice, key), referenceEnv);
+        #endif
+
+        if (originEnv == std::string()) {
+            unsetenv(keyEnv.c_str());
+        } else {
+            setenv(keyEnv.c_str(), originEnv.c_str(), 1);
+        }
+    }
 }  // namespace BehaviorTestsDefinitions

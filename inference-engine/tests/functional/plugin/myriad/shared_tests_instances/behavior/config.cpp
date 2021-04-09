@@ -32,6 +32,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{KEY_LOG_LEVEL, LOG_DEBUG}},
         {{KEY_LOG_LEVEL, LOG_TRACE}},
 
+        {{InferenceEngine::MYRIAD_COPY_OPTIMIZATION, CONFIG_VALUE(YES)}},
+        {{InferenceEngine::MYRIAD_COPY_OPTIMIZATION, CONFIG_VALUE(NO)}},
+
         {{InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, CONFIG_VALUE(NO)}},
 
@@ -73,7 +76,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
 
         {
             {KEY_LOG_LEVEL, LOG_INFO},
-            {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO},
+            {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_ENABLE_HW_ACCELERATION, CONFIG_VALUE(YES)},
             {InferenceEngine::MYRIAD_TILING_CMX_LIMIT_KB, "10"},
@@ -115,10 +118,6 @@ const std::vector<std::map<std::string, std::string>>& getCorrectMultiConfigs() 
         },
         {
             {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
-            {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, InferenceEngine::PluginConfigParams::NO}
-        },
-        {
-            {InferenceEngine::MultiDeviceConfigParams::KEY_MULTI_DEVICE_PRIORITIES, CommonTestUtils::DEVICE_MYRIAD},
             {InferenceEngine::MYRIAD_PROTOCOL, InferenceEngine::MYRIAD_USB}
         },
         {
@@ -153,7 +152,8 @@ INSTANTIATE_TEST_CASE_P(smoke_Multi_BehaviorTests, CorrectConfigTests,
 const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaultEntries() {
     static const std::vector<std::pair<std::string, InferenceEngine::Parameter>> defaultEntries = {
         {KEY_LOG_LEVEL, {LOG_NONE}},
-        {InferenceEngine::MYRIAD_PROTOCOL, {std::string()}}
+        {InferenceEngine::MYRIAD_PROTOCOL, {std::string()}},
+        {InferenceEngine::MYRIAD_COPY_OPTIMIZATION, {true}},
     };
     return defaultEntries;
 }
@@ -380,4 +380,24 @@ INSTANTIATE_TEST_CASE_P(smoke_Multi_BehaviorTests, IncorrectConfigAPITests,
         ::testing::ValuesIn(getIncorrectMultiConfigs())),
     IncorrectConfigAPITests::getTestCaseName);
 
+const std::vector<std::tuple<
+    std::tuple<std::string, std::string, InferenceEngine::Parameter>,
+    std::tuple<std::string, std::string, InferenceEngine::Parameter>>>& getCustomAndEnvironmentEntries() {
+    static const std::vector<std::tuple<
+        std::tuple<std::string, std::string, InferenceEngine::Parameter>,
+        std::tuple<std::string, std::string, InferenceEngine::Parameter>>> customAndEnvironmentEntries = {
+        {{KEY_LOG_LEVEL, LOG_NONE, {LOG_NONE}},
+         {"IE_VPU_LOG_LEVEL", LOG_ERROR, {LOG_ERROR}}},
+
+        {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_WARNING, {LOG_WARNING}},
+         {"IE_VPU_LOG_LEVEL", LOG_NONE, {LOG_NONE}}},
+    };
+    return customAndEnvironmentEntries;
+}
+
+INSTANTIATE_TEST_CASE_P(smoke_BehaviorTests, CorrectSingleOptionCustomAndEnvironmentValueConfigTests,
+    ::testing::Combine(
+        ::testing::ValuesIn(getPrecisions()),
+        ::testing::Values(CommonTestUtils::DEVICE_MYRIAD),
+        ::testing::ValuesIn(getCustomAndEnvironmentEntries())));
 } // namespace
