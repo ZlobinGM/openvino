@@ -143,6 +143,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, CONFIG_VALUE(NO)}},
 
+        {{InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, CONFIG_VALUE(YES)}},
+        {{InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, CONFIG_VALUE(NO)}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -208,6 +211,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {KEY_CONFIG_FILE, ""},
             {InferenceEngine::MYRIAD_DDR_TYPE, InferenceEngine::MYRIAD_DDR_AUTO},
             {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, CONFIG_VALUE(NO)},
+            {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, CONFIG_VALUE(NO)},
         }
     };
 
@@ -372,6 +376,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_ENABLE_FORCE_RESET, {false}},
         {VPU_MYRIAD_CONFIG_KEY(PLATFORM), {std::string()}},
         {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, {true}},
+        {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, {true}},
     };
     return defaultEntries;
 }
@@ -540,6 +545,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, InferenceEngine::PluginConfigParams::YES, {true}},
+        {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, InferenceEngine::PluginConfigParams::NO, {false}},
     };
     return customEntries;
 }
@@ -614,6 +622,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH,
         VPU_CONFIG_KEY(DETECT_NETWORK_BATCH),
         InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL,
+        InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION,
     };
     return privateOptions;
 }
@@ -730,6 +739,9 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
         {{InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, "ON"}},
         {{InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, "OFF"}},
 
+        {{InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, "ON"}},
+        {{InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, "OFF"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), "INCORRECT_LOG_LEVEL"}},
 
@@ -792,6 +804,7 @@ const std::vector<std::map<std::string, std::string>>& getIncorrectConfigs() {
             {InferenceEngine::MYRIAD_DETECT_NETWORK_BATCH, "OFF"},
             {InferenceEngine::MYRIAD_DDR_TYPE, "AUTO"},
             {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, "OFF"},
+            {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, "OFF"},
         }
     };
     return incorrectConfigs;
