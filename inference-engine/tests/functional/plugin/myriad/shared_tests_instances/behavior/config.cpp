@@ -149,6 +149,9 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
         {{InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM, CONFIG_VALUE(YES)}},
         {{InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM, CONFIG_VALUE(NO)}},
 
+        {{InferenceEngine::MYRIAD_NONE_LAYERS, "deconv"}},
+        {{InferenceEngine::MYRIAD_NONE_LAYERS, "conv,pool"}},
+
         // Deprecated
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_NONE}},
         {{VPU_CONFIG_KEY(LOG_LEVEL), LOG_ERROR}},
@@ -216,6 +219,7 @@ std::vector<std::map<std::string, std::string>> getCorrectConfigs() {
             {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, CONFIG_VALUE(NO)},
             {InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM, CONFIG_VALUE(NO)},
+            {InferenceEngine::MYRIAD_NONE_LAYERS, "deconv"},
         }
     };
 
@@ -382,6 +386,7 @@ const std::vector<std::pair<std::string, InferenceEngine::Parameter>>& getDefaul
         {InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL, {true}},
         {InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION, {true}},
         {InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM, {false}},
+        {InferenceEngine::MYRIAD_NONE_LAYERS, {std::string()}},
     };
     return defaultEntries;
 }
@@ -556,6 +561,9 @@ const std::vector<std::tuple<std::string, std::string, InferenceEngine::Paramete
 
         {InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM, InferenceEngine::PluginConfigParams::YES, {true}},
         {InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM, InferenceEngine::PluginConfigParams::NO, {false}},
+
+        {InferenceEngine::MYRIAD_NONE_LAYERS, "deconv", {"deconv"}},
+        {InferenceEngine::MYRIAD_NONE_LAYERS, "conv,pool",   {"conv,pool"}},
     };
     return customEntries;
 }
@@ -632,6 +640,7 @@ const std::vector<std::string>& getPrivateOptions() {
         InferenceEngine::MYRIAD_CHECK_PREPROCESSING_INSIDE_MODEL,
         InferenceEngine::MYRIAD_ENABLE_EARLY_ELTWISE_RELU_FUSION,
         InferenceEngine::MYRIAD_ENABLE_CUSTOM_RESHAPE_PARAM,
+        InferenceEngine::MYRIAD_NONE_LAYERS,
     };
     return privateOptions;
 }
