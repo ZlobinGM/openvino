@@ -7,6 +7,7 @@
 #include "vpu/configuration/parse_numeric.hpp"
 #include "vpu/configuration/switch_converters.hpp"
 #include "vpu/configuration/plugin_configuration.hpp"
+#include "vpu/private_plugin_config.hpp"
 
 #include <unordered_map>
 

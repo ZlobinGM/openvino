@@ -6,6 +6,7 @@
 #include "vpu/configuration/options/device_connect_timeout.hpp"
 #include "vpu/configuration/parse_numeric.hpp"
 #include "vpu/configuration/plugin_configuration.hpp"
+#include "vpu/utils/error.hpp"
 
 namespace vpu {
 

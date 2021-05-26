@@ -18,12 +18,10 @@
 #include <threading/ie_executor_manager.hpp>
 
 #include <vpu/graph_transformer.hpp>
-#include <vpu/parsed_config.hpp>
 
 #include "myriad_executor.h"
 #include "myriad_infer_request.h"
 #include "myriad_async_infer_request.h"
-#include "myriad_config.h"
 
 namespace vpu {
 namespace MyriadPlugin {
@@ -33,13 +31,13 @@ public:
     typedef std::shared_ptr<ExecutableNetwork> Ptr;
 
     ExecutableNetwork(const InferenceEngine::CNNNetwork& network, std::shared_ptr<IMvnc> mvnc, std::vector<DevicePtr> &devicePool,
-                      const MyriadConfiguration& configuration, const ie::ICore* core);
+                      const PluginConfiguration& configuration, const ie::ICore* core);
 
-    ExecutableNetwork(std::istream& strm, std::shared_ptr<IMvnc> mvnc, std::vector<DevicePtr> &devicePool, const MyriadConfiguration& configuration,
+    ExecutableNetwork(std::istream& strm, std::shared_ptr<IMvnc> mvnc, std::vector<DevicePtr> &devicePool, const PluginConfiguration& configuration,
                       const ie::ICore* core);
 
     ExecutableNetwork(const std::string &blobFilename, std::shared_ptr<IMvnc> mvnc, std::vector<DevicePtr> &devicePool,
-                      const MyriadConfiguration& configuration, const ie::ICore* core);
+                      const PluginConfiguration& configuration, const ie::ICore* core);
 
 
     virtual ~ExecutableNetwork() {
@@ -98,7 +96,7 @@ public:
 
     ie::CNNNetwork GetExecGraphInfo() override;
 
-    void Import(std::istream& strm, std::vector<DevicePtr> &devicePool, const MyriadConfiguration& configuration);
+    void Import(std::istream& strm, std::vector<DevicePtr> &devicePool, const PluginConfiguration& configuration);
 
 private:
     Logger::Ptr _log;
@@ -107,7 +105,7 @@ private:
     GraphDesc _graphDesc;
     DevicePtr _device;
     GraphMetaInfo _graphMetaData;
-    MyriadConfiguration _config;
+    PluginConfiguration _config;
     const ie::ICore* _core = nullptr;
     int _actualNumExecutors = 0;
     std::vector<std::string> _supportedMetrics;
@@ -118,7 +116,7 @@ private:
     const size_t _maxTaskExecutorGetResultCount = 1;
     std::queue<std::string> _taskExecutorGetResultIds;
 
-    ExecutableNetwork(std::shared_ptr<IMvnc> mvnc, std::vector<DevicePtr> &devicePool, const MyriadConfiguration& config, const ie::ICore* core);
+    ExecutableNetwork(std::shared_ptr<IMvnc> mvnc, std::vector<DevicePtr> &devicePool, const PluginConfiguration& config, const ie::ICore* core);
 
     ie::ITaskExecutor::Ptr getNextTaskExecutor() {
         std::string id = _taskExecutorGetResultIds.front();

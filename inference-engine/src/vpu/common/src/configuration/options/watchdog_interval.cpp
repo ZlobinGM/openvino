@@ -2,10 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+#include "vpu/private_plugin_config.hpp"
 #include "vpu/utils/containers.hpp"
 #include "vpu/configuration/options/watchdog_interval.hpp"
 #include "vpu/configuration/parse_numeric.hpp"
 #include "vpu/configuration/plugin_configuration.hpp"
+#include "vpu/utils/error.hpp"
 
 #include <unordered_map>
 

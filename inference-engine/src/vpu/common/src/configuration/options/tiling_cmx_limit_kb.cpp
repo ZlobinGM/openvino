@@ -7,6 +7,7 @@
 #include "vpu/configuration/options/tiling_cmx_limit_kb.hpp"
 #include "vpu/configuration/parse_numeric.hpp"
 #include "vpu/configuration/plugin_configuration.hpp"
+#include "vpu/utils/error.hpp"
 
 namespace vpu {
 
