@@ -61,6 +61,7 @@ function(enable_vpu TARGET_NAME FLAG_NAME PLUGIN_NAME)
                 ${IE_MAIN_SOURCE_DIR}/thirdparty/movidius/mvnc/include
                 ${IE_MAIN_SOURCE_DIR}/thirdparty/movidius/mvnc/include/watchdog
                 ${XLINK_INCLUDE}
+                ${XLINK_SOURCES}
                 ${XLINK_PLATFORM_INCLUDE})
         target_link_libraries(${TARGET_NAME} PRIVATE mvnc)
     endif()

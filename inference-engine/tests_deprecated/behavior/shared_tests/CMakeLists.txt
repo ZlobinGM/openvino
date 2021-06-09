@@ -22,7 +22,10 @@ target_link_libraries(${TARGET_NAME} PUBLIC gmock)
 target_include_directories(${TARGET_NAME} PUBLIC
         ${IE_MAIN_SOURCE_DIR}/src/vpu/graph_transformer/include
         $<TARGET_PROPERTY:inference_engine_plugin_api,INTERFACE_INCLUDE_DIRECTORIES>
-        ${CMAKE_CURRENT_SOURCE_DIR}/plugin_tests)
+        ${CMAKE_CURRENT_SOURCE_DIR}/plugin_tests
+        ${XLINK_INCLUDE}
+        ${XLINK_SOURCES}
+        ${XLINK_PLATFORM_INCLUDE})
 
 # developer package
 openvino_developer_export_targets(COMPONENT inference_engine_tests TARGETS ${TARGET_NAME})
